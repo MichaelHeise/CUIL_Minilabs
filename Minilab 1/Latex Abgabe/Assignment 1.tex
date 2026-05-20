@@ -1,0 +1,64 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc} % UTF-8 Codierung
+\usepackage[ngerman]{babel} % Deutsche Beschriftung
+
+\usepackage{graphicx} % Um Bilder einzufügen
+\usepackage{subfigure} % Um mehrere Bilder in eine figure einzufügen
+\usepackage{amssymb, amsmath} % Für Mengensymbole und über Gleichheitszeichen schreiben
+\usepackage{xcolor} % Für Farben
+\usepackage[linkbordercolor=blue]{hyperref} % Für Links im Dokument
+\usepackage[font={small}, labelfont=bf]{caption} % kleine Bildunterschriften
+\usepackage{geometry} % Für Feinanpassungen des Layouts
+
+\geometry{a4paper,left=30mm,right=30mm,top=18mm,bottom=18mm, includeheadfoot}
+
+\title{Bachelor and Master Thesis Template VISIX}
+\author{VISIX Group, WWU Münster }
+\date{May 2022}
+
+\begin{document}
+\pagenumbering{roman}
+
+
+\begin{titlepage}
+\include{sections/titelblatt}
+\end{titlepage}
+
+\newpage
+
+\renewcommand*\contentsname{Contents / Inhaltsverzeichnis}
+\tableofcontents
+\thispagestyle{empty}
+
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\section{HTTP/1 und HTTP/2}
+
+\input{sections/Aufgabe1a.tex}
+
+\input{sections/Aufgabe1b.tex}
+
+\input{sections/Aufgabe1c.tex}
+
+\input{sections/Aufgabe1d.tex}
+
+\input{sections/Aufgabe1e.tex}
+
+\input{sections/Aufgabe1f.tex}
+
+\input{sections/Aufgabe1g.tex}
+
+\newpage
+
+\section{SMTP}
+\input{sections/Aufgabe2.tex}
+
+\newpage
+
+% Literaturverzeichnis
+\bibliographystyle{abbrv}
+\bibliography{references}
+
+\end{document}
