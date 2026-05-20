@@ -1,0 +1,132 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc} % UTF-8 Codierung
+\usepackage[ngerman]{babel} % Deutsche Beschriftung
+
+\usepackage{graphicx} % Um Bilder einzufügen
+\usepackage{subfigure} % Um mehrere Bilder in eine figure einzufügen
+\usepackage{amssymb, amsmath} % Für Mengensymbole und über Gleichheitszeichen schreiben
+\usepackage{xcolor} % Für Farben
+\usepackage[linkbordercolor=blue]{hyperref} % Für Links im Dokument
+\usepackage[font={small}, labelfont=bf]{caption} % kleine Bildunterschriften
+\usepackage{geometry} % Für Feinanpassungen des Layouts
+
+\geometry{a4paper,left=30mm,right=30mm,top=18mm,bottom=18mm, includeheadfoot}
+
+\title{Bachelor and Master Thesis Template VISIX}
+\author{VISIX Group, WWU Münster }
+\date{May 2022}
+
+\begin{document}
+\pagenumbering{roman}
+
+
+\begin{titlepage}
+\include{titelblatt}
+\end{titlepage}
+
+\newpage \ \newpage
+
+\section*{Abstract / Zusammenfassung}
+Der Abstract beschreibt kurz und prägnant, worum es geht, was der wesentliche wissenschaftliche Beitrag ist und welche Ergebnisse erzielt wurden.
+
+
+\newpage \ \newpage
+
+\renewcommand*\contentsname{Contents / Inhaltsverzeichnis}
+\tableofcontents
+\thispagestyle{empty}
+
+\newpage \ \newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\section{Introduction / Einleitung}
+
+Es ist wichtig, (1) die Arbeit zu motivieren und (2) das Problem zu spezifizieren, das gelöst werden soll.
+Zudem sollen (3) die wesentlichen Beiträge (inkl. Lösungsansatz) hier bereits kurz aufgeführt bzw. zusammengefasst werden.
+
+
+\section{Background and Related Work / Grundlagen und Stand der Technik} 
+
+Zu einer wissenschaftlichen Arbeit gehört eine Einordnung in den wissenschaftlichen Kontext.
+Die eigene Idee muss von bereits existierender Arbeit (Stand der Technik)  abgegrenzt werden, so dass der Mehrwert erkennbar wird. Dabei wird die relevante existierende Literatur zitiert, wie man es z.B. aus den Papern unter Related Work kennt.
+Hier ist es wichtig, dass existierende Literatur nicht nur beschrieben, sondern auch diskutiert wird: Wo unterscheiden sich andere Ansätze von Ihrer Arbeit und warum ist der Ansatz der Arbeit viel versprechender für das gewünschte Ziel?
+Aus bisheriger Arbeit verwendete Methoden müssen begründet werden (warum diese und nicht eine andere Methode?).
+
+Eventuell benötigt die Arbeit noch Hintergrundinformationen, die dem/der Leser:in zu vermitteln ist, z.B. wenn sie auf mathematischen Grundlagen basiert oder ein spezielles Anwendungsgebiet (z.B. Medizin, Naturwissenschaften, Geisteswissenschaften) hat. Dies kann dann auch in einem eigenen Abschnitt geschehen.
+
+\section{Approach / Eigene Arbeit} 
+Hier wird die entwickelte Methodik vorgestellt und beschrieben.
+Dies kann mehrere Abschnitte beinhalten. Alle Schritte müssen nachvollziehbar sein bis zu dem Level, dass man es nachimplementieren könnte.
+Hier müssen alle Designentscheideungen diskutiert werden: Warum wurde z.B. diese visuelle Kodierung und/oder Interaktion verwendet und nicht eine andere? Welche Alternativen wurden in Erwägung gezogen und warum verworfen?
+
+Implementierungsdetail und verwendete Bibliotheken können angegeben und beschrieben werden, der Anteil sollte gegenüber dem methodischen/algorithmischen Teil jedoch nicht überwiegen 
+(außer die wissenschaftliche Arbeit beschäftigt sich mit einer besonders effizienten Implementierung).
+Hier können Sie auch technische Umsetzungen beschreiben, d.h., wie etwas implementiert wurde, wobei dies auf der Ebene sein sollte, welche Libraries für was verwendet wurden und nicht auf der Ebene von Klassendiagrammen bzw. auf der Ebene, wo einzelne Funktionsaufrufe beschrieben werden. Pseudocode ist im Allgemeinen auch nicht notwendig.
+
+
+\section{Results and Evaluation / Ergebnisse und Evaluierung} Ergebnisse, die mit dem eigenen Ansatz ermittelt wurden, müssen ausführlich dokumentiert werden. Hier würde man anhand mehrerer Beispiele zeigen, dass dies allgemein funktioniert. Der Detailgrad ist hier so hoch zu wählen, dass der Leser anhand des Geschriebenen in der Lage ist, die Ergebnisse zu reproduzieren. 
+
+Die Laufzeiten der Methoden (gemessene Zeit und/oder asmyptotische Komplexität) sind meist auch von Interesse.
+
+Die Evaluierung würde die Arbeit bzgl. der gewünschten Ziele (Effizienz, Intuitivität, etc.) untersuchen. Welche Ziele wurden erreicht? Hier würde man sich gegen den Stand der Technik vergleichen. Welche Methoden hier zum Einsatz kommen (z.B. Messungen oder Studien mit Nutzer:innen) hängt vom Ziel ab. Auch Auswertung der erhobenen Daten (z.B. statistische Analysen der empirischen Studien) sollen hier aufgeführt werden.
+
+
+\section{Discussion / Diskussion} Zudem würde man den Ansatz diskutieren. Wenn z.B. ein Parameter richtig eingestellt werden muss, würde man hier untersuchen, welche Parameterwerte unter welche Umständen funktionieren. Man würde auch beschreiben, welche Einschränkungen die Methode hat, d.h., wann sie nicht funktioniert.
+Vielleicht funktioniert der Ansatz unter bestimmten Bedinungen sehr gut, unter anderen aber gar nicht. Mit der kritischen Diskussion der Probleme wird nicht die eigene Arbeit abgewertet, sondern es werden weitere Forschungsmöglichkeiten aufgezeigt und Limitierungen diskutiert. Hier kann man auch wieder die in Abschnitt 2 beschriebenen Arbeiten aufgreifen und Vor- und Nachteile gegenüber diesen disktieren.
+
+
+\section{Conclusions and Future Work / Fazit und Ausblick} Zum Schluss zieht man ein Fazit über das Erreichte und zeigt (wenn gegeben) zukünftigen Weiterentwicklungen auf. Der Ausblick kann auch dem Abschnitt der Diskussion zugefügt werden, wenn dieser sich unmittelbar aus dem Diskutierten ergibt.
+
+\section*{References / Referenzen}
+Die Literaturangaben aller oben beschriebenen Quellen. Diese müssen vollständig sein (Autoren, Titel, wo erschienen - Zeitschrift oder Konferenzband angeben, Seitenangaben, wann erschienen, Herausgeber). Sinnvoll ist es komplette BibTeX-Einträge herunterzuladen wie z.B. die des Artikels von Molchanov und Linsen~\cite{Molchanov19} oder von Rave et al.~\cite{Rave21}. Man beachte auch, wie hier zitiert wurde. Eine Referenz ist üblicherweise Teil des Satzes, so wie in diesem Beispiel~\cite{visix}, aber der Satz soll auch ohne Referenz noch vollständig sein.
+
+\section*{Weitere Anmerkungen}
+\begin{itemize}
+\item Alles Geschriebene sollten Ihre eigenen Worte sein. Wenn Passagen aus anderen Quellen verwendet werden, müssen diese als Zitate gekennzeichnet sein. Wenn Sie Inhalte aus anderen Quellen nehmen, muss eine entsprechende Referenz eingefügt werden. Dies gilt insbesondere auch bei Bildern, die Sie aus anderen Quellen nehmen.
+\item Eine genaue Seitenzahl gibt es nicht. Wenn alles, was oben genannt ist, drin ist, dann passt das.
+\item Bitte machen Sie die Bilder nicht zu klein. Verwenden Sie lieber mehr Seiten.
+\item Sie dürfen in Deutsch oder auch Englisch schreiben.
+\item Der Titel sollte den wesentlichen Beitrag der Arbeit wiederspiegeln, dabei aber möglichst kurz und prägnant sein.
+\item Der Schreibstil sollte nicht narrativ sein (erst haben wir das gemacht, dann das, usw.). Stattdessen soll der finale (beste) Ansatz beschrieben (und begründet) werden. Es ist aber auch legitim, mehrere Ansätze zu beschreiben, wenn a priori nicht entschieden werden kann, welcher besser ist, und die dann verglichen werden.
+\item Abbildungen sollten stets eine Bildunterschrift aufweisen, damit diese auch eigenständig gelesen und interpretiert werden können.
+Eine Abbildung sollte zudem im Text an mindestens einer Stelle referenziert werden.
+\item Abbildungen sollten auch Legenden haben wie z.B. Farbpaletten und Achsenbeschriftungen.
+\item Wenn allgemein von Personen die Rede ist, sollte gegendert werden.
+\item Eine Liste von Abbildungen und/oder Tabellen ist nicht notwendig.
+\end{itemize}
+
+% Literaturverzeichnis
+\bibliographystyle{abbrv}
+\bibliography{references}
+
+\newpage
+\section*{Eidesstattliche Erklärung}
+
+% Die Aktuelle Version der Eidesstättlichen Erklärung kann beim zuständigen Prüfungsamts gefunden werden.
+% Nachfolgend ist die Version für Bachelor und Master des Prüfungsamts Mathe/Informatik vom 05.10.2016
+
+Hiermit versichere ich, dass die vorliegende Arbeit über \textit{\glqq Titel\grqq} selbstständig verfasst worden ist, dass keine anderen Quellen und Hilfsmittel als die angegebenen benutzt worden sind und dass die Stellen der Arbeit, die anderen Werken – auch elektronischen Medien – dem Wortlaut oder Sinn nach entnommen wurden, auf jeden Fall unter Angabe der Quelle als Entlehnung kenntlich gemacht worden sind.
+
+\vspace{1cm}
+
+\noindent
+\parbox{20em}{\hrulefill}
+
+\noindent
+Vorname Nachname, Münster, \today
+
+\vspace{1cm}
+
+\noindent
+Ich erkläre mich mit einem Abgleich der Arbeit mit anderen Texten zwecks Auffindung von Übereinstimmungen sowie mit einer zu diesem Zweck vorzunehmenden Speicherung der Arbeit in eine Datenbank einverstanden.
+
+\vspace{1cm}
+
+\noindent
+\parbox{20em}{\hrulefill}
+
+\noindent
+Vorname Nachname, Münster, \today
+
+\end{document}

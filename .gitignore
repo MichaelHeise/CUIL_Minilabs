@@ -1,0 +1,80 @@
+# LaTeX intermediate/build files
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.fdb_latexmk
+*.fmt
+*.fot
+*.cb
+*.cb2
+*.out
+*.toc
+*.xdv
+*.synctex.gz
+*.synctex.gz(busy)
+*.run.xml
+*.bcf
+*.blg
+*.bbl
+*.brf
+*.idx
+*.ilg
+*.ind
+*.ist
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.xdy
+*.mw
+*.nlo
+*.nls
+*.nav
+*.snm
+*.vrb
+*.dvi
+*.ps
+*.thm
+*.loa
+*.lol
+*.maf
+*.mtc
+*.mtc0
+*.spl
+
+# latexmk
+*.dpth
+*.md5
+*.auxlock
+
+# Tectonic
+*.blx.bib
+
+# arara
+*.dpth
+
+# minted / pygments
+_minted*
+*.pyg
+
+# pythontex
+*.pytxcode
+pythontex-files-*
+
+# sagetex
+*.sagetex.sage
+*.sagetex.py
+*.sagetex.scmd
+
+# Editors/OS noise
+*~
+*.swp
+*.DS_Store
+
+# Uncomment if generated PDF should not be versioned
+# *.pdf
