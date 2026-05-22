@@ -78,3 +78,9 @@ pythontex-files-*
 
 # Uncomment if generated PDF should not be versioned
 # *.pdf
+
+# Venv
+*venv*/
+
+# IDEs
+.vscode/

@@ -1,0 +1,2 @@
+argparse
+httpx[http2]
