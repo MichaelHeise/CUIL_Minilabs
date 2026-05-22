@@ -1,6 +1,21 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc} % UTF-8 Codierung
 \usepackage[ngerman]{babel} % Deutsche Beschriftung
+\usepackage{listings} % Für Quellcode
+
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=5pt,
+    breaklines=true,
+    showstringspaces=false,
+}
 
 \usepackage{graphicx} % Um Bilder einzufügen
 \usepackage{subfigure} % Um mehrere Bilder in eine figure einzufügen
