@@ -1,0 +1,9 @@
+usage: connection.py [-h] [--host HOST] [--port PORT] [--path PATH]
+                     [--http_version {1,2}]
+
+options:
+  -h, --help            show this help message and exit
+  --host HOST           Host to connect to
+  --port PORT           Port to connect to
+  --path PATH           Path to request
+  --http_version {1,2}  HTTP version to use (1 or 2)

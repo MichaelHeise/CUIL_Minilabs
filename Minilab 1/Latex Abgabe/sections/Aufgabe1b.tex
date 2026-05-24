@@ -1,1 +1,63 @@
 \subsection{Analyse der HTTP/2-Kommunikation}
+
+Die HTTP/2-Kommunikation zwischend dem Client und dem Server wurde über Wireshark analysiert.
+Dabei wurden die folgenden Schritte durchgeführt:
+
+\begin{enumerate}
+    \item Starten von Wireshark und Auswahl der entsprechenden Netzwerkschnittstelle, um den Datenverkehr zu erfassen.
+    \item Anfrage an die Webseite mit dem Python Skript \ref{code:connection} senden, um die HTTP/2-Kommunikation zu initiieren.
+    \subitem \texttt{python3 connection.py --http\_version 2}
+    \item Aufgezeichnete Pakete nach der Anfrage durchsuchen.
+    \item Filterung der Frame Pakete Nummern um nur DNS Abfrage, TCP Handshake und HTTP/2 Pakete zu betrachten.
+    \subitem \texttt{frame.number >= \{ErstesPaketNummer\} \&\& frame.number <= \{LetztesPaketNummer\}}
+    \item Speichern der relevanten Pakete für die weitere Analyse.
+    \item Analyse der HTTP/2 Pakete, um die Kommunikation zwischen Client und Server zu verstehen, einschließlich der Anfragen und Antworten, die über HTTP/2 gesendet wurden.
+\end{enumerate}
+
+Über Wireshark können die versendeten Pakete im Detail nachverfolgt werden. Die Kommunikation beginnt dabei mit dem Aufbau einer TCP-Verbindung.
+Der Client fragt die TCP-Verbindung zum Server an, und der Server antwortet mit einem SYN-ACK-Paket.
+Der Client bestätigt den Verbindungsaufbau mit einem ACK-Paket, wodurch die TCP-Verbindung etabliert wird.
+Nach dem erfolgreichen Aufbau der TCP-Verbindung wird diese für die HTTP/2-Kommunikation genutzt, um Anfragen und Antworten zwischen Client und Server auszutauschen.
+Dabei sendet der Client ein Connection Preface, Settings und Window Update.
+Das Connection Preface is ein einzigartiger String, der dem Server signalisiert, dass der Client HTTP/2 unterstützt, während die Settings und Window Update Pakete die Parameter für die Kommunikation festlegen.
+Die Settings enthalten Informationen über die unterstützten Funktionen und Einstellungen des Clients, während die Window Update Pakete die Flusskontrolle für die Datenübertragung regeln.
+In unserem Fall sind folgende Settings gesendet worden:
+\begin{itemize}
+    \item Header table size : 4096
+    \item Enable PUSH : 0
+    \item Initial Windows size : 65535
+    \item Max Frame size : 16384
+    \item Max Concurrent Streams : 100
+    \item Max Header List Size : 65536
+\end{itemize}
+Außerdem wurde foldendes Window Update Paket gesendet:
+\begin{itemize}
+    \item Connection Window size (before) : 65535
+    \item Connection Window size (after) : 16842751
+\end{itemize}
+
+
+\begin{table}
+    \label{tab:packet_details}
+    \centering
+    \begin{adjustbox}{width=\textwidth}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \textbf{Paketnummer} & \textbf{Pakettyp} & \textbf{Stream-ID} & \textbf{Flags} & \textbf{Nutzlastgrößen} \\
+        \hline
+        6 & Connection preface & Magic & - & 0 \\
+        6 & Settings & 0 & ACK=False & 36 \\
+        6 & Window Update & 0 & - & 4 \\
+        7 & Headers & 1 & End Headers=True, End Stream=True, Padded=False, Priority=False & 48 \\
+        7 & Window Update & 1 & - & 4 \\
+        10 & Settings & 0 & ACK=False & 24 \\
+        12 & Settings & 0 & ACK=True & 0 \\
+        13 & Settings & 0 & ACK=True & 0 \\
+        13 & Window Update & 0 & - & 4 \\
+        14 & Headers & 1 & Priority=False, End Headers=True, End Stream=False, Padded=False & 117 \\
+        16 & Data & 1 & End Stream=True, Padded=False & 1056 \\
+        \hline
+    \end{tabular}
+    \end{adjustbox}
+    \caption{HTTP/2 Paketdetails}
+\end{table}
