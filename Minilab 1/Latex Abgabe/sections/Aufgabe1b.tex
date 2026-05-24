@@ -35,3 +35,29 @@ Außerdem wurde foldendes Window Update Paket gesendet:
     \item Connection Window size (before) : 65535
     \item Connection Window size (after) : 16842751
 \end{itemize}
+
+
+\begin{table}
+    \label{tab:packet_details}
+    \centering
+    \begin{adjustbox}{width=\textwidth}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \textbf{Paketnummer} & \textbf{Pakettyp} & \textbf{Stream-ID} & \textbf{Flags} & \textbf{Nutzlastgrößen} \\
+        \hline
+        6 & Connection preface & Magic & - & 0 \\
+        6 & Settings & 0 & ACK=False & 36 \\
+        6 & Window Update & 0 & - & 4 \\
+        7 & Headers & 1 & End Headers=True, End Stream=True, Padded=False, Priority=False & 48 \\
+        7 & Window Update & 1 & - & 4 \\
+        10 & Settings & 0 & ACK=False & 24 \\
+        12 & Settings & 0 & ACK=True & 0 \\
+        13 & Settings & 0 & ACK=True & 0 \\
+        13 & Window Update & 0 & - & 4 \\
+        14 & Headers & 1 & Priority=False, End Headers=True, End Stream=False, Padded=False & 117 \\
+        16 & Data & 1 & End Stream=True, Padded=False & 1056 \\
+        \hline
+    \end{tabular}
+    \end{adjustbox}
+    \caption{HTTP/2 Paketdetails}
+\end{table}
