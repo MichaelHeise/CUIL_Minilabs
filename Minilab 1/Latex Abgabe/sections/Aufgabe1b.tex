@@ -36,9 +36,13 @@ Außerdem wurde foldendes Window Update Paket gesendet:
     \item Connection Window size (after) : 16842751
 \end{itemize}
 
-Für die ganze HTTP/2-Kommunikation wurden insegesamt 7 Frames auf Verrbindungsschicht verschickt, diese 7 Frames enthalten 11 HTTP/2 Frames, von welchen 6 gesendet und 5 empfangen wurden. Dabei wurden insgesamt 1419 Bytes übertragen, von welchen 161 Bytes gesendet und 1258 Bytes empfangen wurden.~\ref{tab:packet_size}
+Für die ganze HTTP/2-Kommunikation wurden insegesamt 7 Frames auf Verrbindungsschicht verschickt, diese 7 Frames enthalten 11 HTTP/2 Frames, von welchen 6 gesendet und 5 empfangen wurden.
+Dabei wurden insgesamt 1419 Bytes übertragen, von welchen 161 Bytes gesendet und 1258 Bytes empfangen wurden.~\ref{tab:packet_size}
 
-Bei der beobachtbaren HTTP/2-Kommunikation werden Settings nur über Stream 0 gesendet, während Stream 1 hier für die Get Anfrage genutzt wird. Außerdem werden Falgs wie End Headers, End Stream, Padded und Priority in den Header Frames verwendet, um die Struktur und Priorität der übertragenen Daten zu steuern. Die Nutzlastgrößen variieren je nach Frame-Typ, wobei die Data Frames die größte Nutzlast aufweisen, da sie die eigentlichen Daten der HTTP-Anfrage und -Antwort enthalten. Eine weitere interessante Flag ist die ACK-Flag in den Settings Frames. Die ACK-Falg wird genutzt um das erhalten der zuvor gesendeten Settings und deren Anwendung zu bestätigen, dabei enthält dieser HTTP/2 Frame nie eine Nutzlast~\cite{rfc9113_http2_headers}.~\ref{tab:packet_details}
+Bei der beobachtbaren HTTP/2-Kommunikation werden Settings nur über Stream 0 gesendet, während Stream 1 hier für die Get Anfrage genutzt wird.
+Außerdem werden Falgs wie End Headers, End Stream, Padded und Priority in den Header Frames verwendet, um die Struktur und Priorität der übertragenen Daten zu steuern.
+Die Nutzlastgrößen variieren je nach Frame-Typ, wobei die Data Frames die größte Nutzlast aufweisen, da sie die eigentlichen Daten der HTTP-Anfrage und -Antwort enthalten.
+Eine weitere interessante Flag ist die ACK-Flag in den Settings Frames. Die ACK-Falg wird genutzt um das erhalten der zuvor gesendeten Settings und deren Anwendung zu bestätigen, dabei enthält dieser HTTP/2 Frame nie eine Nutzlast~\cite{rfc9113_http2_headers}.~\ref{tab:packet_details}
 
 
 \begin{table}
@@ -106,3 +110,24 @@ Bei der beobachtbaren HTTP/2-Kommunikation werden Settings nur über Stream 0 ge
     \label{tab:packet_details}
 \end{table}
 
+\subsubsection{HPACK}
+
+HAPACK ist ein Header-Komprimierungsverfahren, das in HTTP/2 verwendet wird, um die Größe der übertragenen Header zu reduzieren und somit die Effizienz der Kommunikation zu verbessern.
+Außerdem bietet es durch die Komprimierung der Header eine verbesserte Sicherheit, da es die Angriffsfläche für bestimmte Arten von Angriffen reduziert~\cite{rfc9113_http2_headers}.
+Die Kompremierung erfolgt durch die Verwendung von statischen und dynamischen Tabellen, die die Header-Felder und deren Werte speichern.
+Jeder Enpunkt verwaltet zwei dynamische Tabellen nach dem First-In-First-Out (FIFO) Prinzip, eine für das Kodieren und eine für das Dekodieren.
+Die Größe der dynamischen Tabellen kann durch die Settings Frames angepasst werden, um die Effizienz der Komprimierung zu optimieren.
+In unserem Fall wurde die Header table size auf 4096 Bytes eingestellt, was bedeutet, dass die dynamische Tabelle bis zu 4096 Bytes an Header-Feldern und Werten speichern kann.
+Die statische Tabelle enthält eine vordefinierte Liste von häufig verwendeten Header-Feldern und Werten, die von beiden Endpunkten geteilt wird, um die Komprimierung weiter zu verbessern.
+Die dynamische Tabelle wird während der Kommunikation aktualisiert, um neue Header-Felder und Werte aufzunehmen, die nicht in der statischen Tabelle enthalten sind.
+Dabei gibt es verschiedene Szenarien.
+Wir betrachten immer ein Key-Value Paar, also ein Header-Feld und dessen Wert.
+Dabei kann entweder der Key in der dynamischen Tabelle vorhanden sein, oder die Kombination aus Key und Value, oder keines von beiden.
+Wenn etwas in der dynamischen Tabelle vorhanden ist, wird ein Index verwendet, um auf das entsprechende Key-Value Paar zu verweisen, was die Größe der übertragenen Header reduziert.~\cite{rfc7541_http2_hpack}
+
+Beispielhaft kann Paket 7 betrachtet werden (Die HTTP/2 Header Frame mit der Get Anfrage).
+In diesem Paket wird die Get Anfrage gesendet, dabei ist der Key ":method" mit dem Wert "GET" in der statischen Tabelle vorhanden.
+Damit ist für die Übertragung nur 1 Byte notwendig, während die Übertragung des Key-Value Paares ohne Komprimierung mindestens 11 Bytes benötigen würde.
+
+Im selben Paket wird der Key "user-agent" mit dem Wert "python-httpx/0.28.1" übertragen, dabei ist der Key in der statischen Tabelle vorhanden, aber die Kombination aus Key und Value nicht.
+Daher wird ein Index für den Key "user-agent" verwendet, aber der Wert "python-httpx/0.28.1" wird nicht indiziert und anders komprimiert übertragen, was insgesamt 16 Bytes benötigt.
