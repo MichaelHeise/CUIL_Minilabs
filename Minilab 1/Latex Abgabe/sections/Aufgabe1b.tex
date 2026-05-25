@@ -5,7 +5,7 @@ Dabei wurden die folgenden Schritte durchgeführt:
 
 \begin{enumerate}
     \item Starten von Wireshark und Auswahl der entsprechenden Netzwerkschnittstelle, um den Datenverkehr zu erfassen.
-    \item Anfrage an die Webseite mit dem Python Skript \ref{code:connection} senden, um die HTTP/2-Kommunikation zu initiieren.
+    \item Anfrage an die Webseite mit dem Python Skript~\ref{code:connection} senden, um die HTTP/2-Kommunikation zu initiieren.
     \subitem \texttt{python3 connection.py --http\_version 2}
     \item Aufgezeichnete Pakete nach der Anfrage durchsuchen.
     \item Filterung der Frame Pakete Nummern um nur DNS Abfrage, TCP Handshake und HTTP/2 Pakete zu betrachten.
@@ -36,28 +36,73 @@ Außerdem wurde foldendes Window Update Paket gesendet:
     \item Connection Window size (after) : 16842751
 \end{itemize}
 
+Für die ganze HTTP/2-Kommunikation wurden insegesamt 7 Frames auf Verrbindungsschicht verschickt, diese 7 Frames enthalten 11 HTTP/2 Frames, von welchen 6 gesendet und 5 empfangen wurden. Dabei wurden insgesamt 1419 Bytes übertragen, von welchen 161 Bytes gesendet und 1258 Bytes empfangen wurden.~\ref{tab:packet_size}
+
+Bei der beobachtbaren HTTP/2-Kommunikation werden Settings nur über Stream 0 gesendet, während Stream 1 hier für die Get Anfrage genutzt wird. Außerdem werden Falgs wie End Headers, End Stream, Padded und Priority in den Header Frames verwendet, um die Struktur und Priorität der übertragenen Daten zu steuern. Die Nutzlastgrößen variieren je nach Frame-Typ, wobei die Data Frames die größte Nutzlast aufweisen, da sie die eigentlichen Daten der HTTP-Anfrage und -Antwort enthalten. Eine weitere interessante Flag ist die ACK-Flag in den Settings Frames. Die ACK-Falg wird genutzt um das erhalten der zuvor gesendeten Settings und deren Anwendung zu bestätigen, dabei enthält dieser HTTP/2 Frame nie eine Nutzlast~\cite{rfc9113_http2_headers}.~\ref{tab:packet_details}
+
 
 \begin{table}
-    \label{tab:packet_details}
     \centering
     \begin{adjustbox}{width=\textwidth}
-    \begin{tabular}{|c|c|c|c|c|}
-        \hline
-        \textbf{Paketnummer} & \textbf{Pakettyp} & \textbf{Stream-ID} & \textbf{Flags} & \textbf{Nutzlastgrößen} \\
-        \hline
-        6 & Connection preface & Magic & - & 0 \\
-        6 & Settings & 0 & ACK=False & 36 \\
-        6 & Window Update & 0 & - & 4 \\
-        7 & Headers & 1 & End Headers=True, End Stream=True, Padded=False, Priority=False & 48 \\
-        7 & Window Update & 1 & - & 4 \\
-        10 & Settings & 0 & ACK=False & 24 \\
-        12 & Settings & 0 & ACK=True & 0 \\
-        13 & Settings & 0 & ACK=True & 0 \\
-        13 & Window Update & 0 & - & 4 \\
-        14 & Headers & 1 & Priority=False, End Headers=True, End Stream=False, Padded=False & 117 \\
-        16 & Data & 1 & End Stream=True, Padded=False & 1056 \\
-        \hline
-    \end{tabular}
+        \begin{minipage}{\textwidth}
+            \centering
+            \begin{tabular}{|c|c|c|}
+                \hline
+                \textbf{Paketnummer} & \textbf{Empfangen oder gesendet} & \textbf{HTTP/2 Frame Größe in Bytes} \\
+                \hline
+                6 & Gesendet & 24 \\
+                6 & Gesendet & 45 \\
+                6 & Gesendet & 13 \\
+                7 & Gesendet & 57 \\
+                7 & Gesendet & 13 \\
+                10 & Empfangen & 45 \\
+                12 & Gesendet & 9 \\
+                13 & Empfangen & 9 \\
+                13 & Empfangen & 13 \\
+                14 & Empfangen & 126 \\
+                16 & Empfangen & 1065 \\
+                \hline
+            \end{tabular}
+            
+            \vspace{0.2cm}
+            
+            \begin{tabular}{|c|c|}
+                \hline
+                \textbf{Gesamt Gesendet} & \textbf{161} \\
+                \textbf{Gesamt Empfangen} & \textbf{1258} \\
+                \textbf{Gesamt} & \textbf{1419} \\
+                \textbf{Frames Gesamt} & \textbf{7} \\
+                \textbf{HTTP/2 Frames Gesamt} & \textbf{11} \\
+                \hline
+            \end{tabular}
+        \end{minipage}
+    \end{adjustbox}
+    \caption{Gesendete und empfangene HTTP/2 Frames mit ihrer Größe in Bytes}
+    \label{tab:packet_size}
+\end{table}
+
+\begin{table}
+    \centering
+    \begin{adjustbox}{width=\textwidth}
+        \begin{tabular}{|c|c|c|c|c|}
+            \hline
+            \textbf{Paketnummer} & \textbf{Pakettyp} & \textbf{Stream-ID} & \textbf{Flags} & \textbf{Nutzlastgrößen (Bytes)} \\
+            \hline
+            6 & Connection preface & Magic & - & 0 \\
+            6 & Settings & 0 & ACK=False & 36 \\
+            6 & Window Update & 0 & - & 4 \\
+            7 & Headers & 1 & End Headers=True, End Stream=True, Padded=False, Priority=False & 48 \\
+            7 & Window Update & 1 & - & 4 \\
+            10 & Settings & 0 & ACK=False & 24 \\
+            12 & Settings & 0 & ACK=True & 0 \\
+            13 & Settings & 0 & ACK=True & 0 \\
+            13 & Window Update & 0 & - & 4 \\
+            14 & Headers & 1 & Priority=False, End Headers=True, End Stream=False, Padded=False & 117 \\
+            16 & Data & 1 & End Stream=True, Padded=False & 1056 \\
+            \hline
+        \end{tabular}
     \end{adjustbox}
     \caption{HTTP/2 Paketdetails}
+    \label{tab:packet_details}
 \end{table}
+
