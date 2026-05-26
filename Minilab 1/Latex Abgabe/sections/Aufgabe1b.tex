@@ -5,6 +5,7 @@ Die HTTP/2-Kommunikation zwischend dem Client und dem Server wurde über Wiresha
 Dabei wurden die folgenden Schritte durchgeführt:
 
 \begin{enumerate}
+    \label{enum:wireshark_capture_method}
     \item Starten von Wireshark und Auswahl der entsprechenden Netzwerkschnittstelle, um den Datenverkehr zu erfassen.
     \item Anfrage an die Webseite mit dem Python Skript~\ref{code:connection} senden, um die HTTP/2-Kommunikation zu initiieren.
     \subitem \texttt{python3 connection.py --http\_version 2}
