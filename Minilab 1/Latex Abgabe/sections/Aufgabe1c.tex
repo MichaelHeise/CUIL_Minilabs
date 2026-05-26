@@ -59,11 +59,14 @@ Die HTTP/1.1 Antwort besteht aus einem Start Line, gefolgt von Headern und einem
 Die HTTP/1.1 Kommunikation in der pcapng Datei entspricht somit dem Standard und es gibt keine Auffälligkeiten oder Besonderheiten anzumerken.
 
 Für die ganze Kommunikation wurden 12 Frames auf der Verbindungsschicht ausgetauscht, davon waren 10 TCP Pakete und 2 HTTP Pakete.
+Für die HTTP/1.1 Anfrage wurde 1 HTTP Paket gesendet und für die HTTP/1.1 Antwort wurde 1 HTTP Paket empfangen. 
+Die Anfrage war 168 Bytes groß.
+Die Antwort war 1304 Bytes groß, wobei Header und Body des HTTP/1.1 über 2 TCP Segmente übertragen wurden.
 
 \subsubsection{DNS Cache in der pcapng}
 Unabhängig von der HTTP/1.1 Kommunikation fällt in der pcapng Datei eine Besonderheit auf.
 Die TCP Verbindung zum Server wird über IPv6 gestartet bevor die Antwort des DNS Servers die URL in eine IPv6 Adresse aufgelöst hat.
-Das is in sofern ungewähnlich, da der Client diese die Adresse hinter der URL eigentlich erst nach der DNS Abfrage kennen sollte, um die TCP Verbindung zum Server zu starten.
+Das is in sofern ungewöhnlich, da der Client diese die Adresse hinter der URL eigentlich erst nach der DNS Abfrage kennen sollte, um die TCP Verbindung zum Server zu starten.
 Die wahrscheinlichste Erklärung ist, dass die IP Adresse bereits in einem der DNS Caches lag.
 DNS Anfragen werden auf vielen Ebenen gecached, wie zum Beispiel im Betriebssystem, im Browser, Router oder in einem lokalen DNS Server.
 Wobei in unserem Fall wahrscheinlich der DNS Cache des Betriebssystems die IP Adresse vorhielt, da kein Browser genutzt wurde und Kommunikation mit dem lokalen DNS Server oder dem Router offensichtlich nicht abgewartet wurde.
