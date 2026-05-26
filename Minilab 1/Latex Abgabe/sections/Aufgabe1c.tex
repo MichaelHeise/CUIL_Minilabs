@@ -58,7 +58,7 @@ Der Payload bei der Anfrage ist 0 Bytes groß, da es sich um eine Get Anfrage ha
 Die HTTP/1.1 Antwort besteht aus einem Start Line, gefolgt von Headern und einem Body. Dabei ist der Payload (Body) 1056 Bytes groß, wie im Content-Length Header angegeben~\ref{tab:http11-header-response}.
 Die HTTP/1.1 Kommunikation in der pcapng Datei entspricht somit dem Standard und es gibt keine Auffälligkeiten oder Besonderheiten anzumerken.
 
-Für die ganze Kommunikation wurden 12 Frames auf der Verbindungsschicht ausgetauscht, davon waren 10 TCP Pakete und 2 HTTP Pakete.
+Für die ganze Kommunikation mit dem Server wurden 12 Frames auf der Verbindungsschicht ausgetauscht, davon waren 10 TCP Pakete und 2 HTTP Pakete.
 Für die HTTP/1.1 Anfrage wurde 1 HTTP Paket gesendet und für die HTTP/1.1 Antwort wurde 1 HTTP Paket empfangen. 
 Die Anfrage war 168 Bytes groß.
 Die Antwort war 1304 Bytes groß, wobei Header und Body des HTTP/1.1 über 2 TCP Segmente übertragen wurden.

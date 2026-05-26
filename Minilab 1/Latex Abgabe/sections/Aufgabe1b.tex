@@ -1,21 +1,5 @@
 \subsection{Analyse der HTTP/2-Kommunikation}
 
-Die HTTP/2-Kommunikation zwischend dem Client und dem Server wurde über Wireshark analysiert.
-\FloatBarrier
-Dabei wurden die folgenden Schritte durchgeführt:
-
-\begin{enumerate}
-    \label{enum:wireshark_capture_method}
-    \item Starten von Wireshark und Auswahl der entsprechenden Netzwerkschnittstelle, um den Datenverkehr zu erfassen.
-    \item Anfrage an die Webseite mit dem Python Skript~\ref{code:connection} senden, um die HTTP/2-Kommunikation zu initiieren.
-    \subitem \texttt{python3 connection.py --http\_version 2}
-    \item Aufgezeichnete Pakete nach der Anfrage durchsuchen.
-    \item Filterung der Frame Pakete Nummern um nur DNS Abfrage, TCP Handshake und HTTP/2 Pakete zu betrachten.
-    \subitem \texttt{frame.number >= \{ErstesPaketNummer\} \&\& frame.number <= \{LetztesPaketNummer\}}
-    \item Speichern der relevanten Pakete für die weitere Analyse.
-    \item Analyse der HTTP/2 Pakete, um die Kommunikation zwischen Client und Server zu verstehen, einschließlich der Anfragen und Antworten, die über HTTP/2 gesendet wurden.
-\end{enumerate}
-
 Über Wireshark können die versendeten Pakete im Detail nachverfolgt werden. Die Kommunikation beginnt dabei mit dem Aufbau einer TCP-Verbindung.
 Der Client fragt die TCP-Verbindung zum Server an, und der Server antwortet mit einem SYN-ACK-Paket.
 Der Client bestätigt den Verbindungsaufbau mit einem ACK-Paket, wodurch die TCP-Verbindung etabliert wird.
