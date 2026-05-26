@@ -15,8 +15,7 @@ Das Script gibt die Antwort des Servers auf der Kommandozeile aus.
 Die HTTP-Kommunikation zwischen dem Client und dem Server wurde über Wireshark analysiert.
 Dabei wurden die folgenden Schritte durchgeführt:
 
-\begin{enumerate}
-    \label{enum:wireshark_capture_method}
+\begin{enumerate}\label{enum:wireshark_capture_method}
     \item Starten von Wireshark und Auswahl der entsprechenden Netzwerkschnittstelle, um den Datenverkehr zu erfassen.
     \item Anfrage an die Webseite mit dem Python Skript~\ref{code:connection} senden, um die HTTP-Kommunikation zu initiieren.
     \subitem \texttt{python3 connection.py --http\_version ...}
