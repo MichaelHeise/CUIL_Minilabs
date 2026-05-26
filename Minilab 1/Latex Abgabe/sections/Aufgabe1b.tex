@@ -1,42 +1,42 @@
 \subsection{Analyse der HTTP/2-Kommunikation}
 
-Die HTTP/2-Kommunikation zwischend dem Client und dem Server wurde über Wireshark analysiert.
-Dabei wurden die folgenden Schritte durchgeführt:
-
-\begin{enumerate}
-    \item Starten von Wireshark und Auswahl der entsprechenden Netzwerkschnittstelle, um den Datenverkehr zu erfassen.
-    \item Anfrage an die Webseite mit dem Python Skript~\ref{code:connection} senden, um die HTTP/2-Kommunikation zu initiieren.
-    \subitem \texttt{python3 connection.py --http\_version 2}
-    \item Aufgezeichnete Pakete nach der Anfrage durchsuchen.
-    \item Filterung der Frame Pakete Nummern um nur DNS Abfrage, TCP Handshake und HTTP/2 Pakete zu betrachten.
-    \subitem \texttt{frame.number >= \{ErstesPaketNummer\} \&\& frame.number <= \{LetztesPaketNummer\}}
-    \item Speichern der relevanten Pakete für die weitere Analyse.
-    \item Analyse der HTTP/2 Pakete, um die Kommunikation zwischen Client und Server zu verstehen, einschließlich der Anfragen und Antworten, die über HTTP/2 gesendet wurden.
-\end{enumerate}
-
 Über Wireshark können die versendeten Pakete im Detail nachverfolgt werden. Die Kommunikation beginnt dabei mit dem Aufbau einer TCP-Verbindung.
 Der Client fragt die TCP-Verbindung zum Server an, und der Server antwortet mit einem SYN-ACK-Paket.
 Der Client bestätigt den Verbindungsaufbau mit einem ACK-Paket, wodurch die TCP-Verbindung etabliert wird.
 Nach dem erfolgreichen Aufbau der TCP-Verbindung wird diese für die HTTP/2-Kommunikation genutzt, um Anfragen und Antworten zwischen Client und Server auszutauschen.
 Dabei sendet der Client ein Connection Preface, Settings und Window Update.
 Das Connection Preface is ein einzigartiger String, der dem Server signalisiert, dass der Client HTTP/2 unterstützt, während die Settings und Window Update Pakete die Parameter für die Kommunikation festlegen.
-Die Settings enthalten Informationen über die unterstützten Funktionen und Einstellungen des Clients, während die Window Update Pakete die Flusskontrolle für die Datenübertragung regeln.
-In unserem Fall sind folgende Settings gesendet worden:
-\begin{itemize}
-    \item Header table size : 4096
-    \item Enable PUSH : 0
-    \item Initial Windows size : 65535
-    \item Max Frame size : 16384
-    \item Max Concurrent Streams : 100
-    \item Max Header List Size : 65536
-\end{itemize}
-Außerdem wurde foldendes Window Update Paket gesendet:
-\begin{itemize}
-    \item Connection Window size (before) : 65535
-    \item Connection Window size (after) : 16842751
-\end{itemize}
+Die Settings~\ref{tab:http2_settings} enthalten Informationen über die unterstützten Funktionen und Einstellungen des Clients, während die Window Update Pakete~\ref{tab:http2_window_sizes} die Flusskontrolle für die Datenübertragung regeln.
 
-Für die ganze HTTP/2-Kommunikation wurden insegesamt 7 Frames auf Verrbindungsschicht verschickt, diese 7 Frames enthalten 11 HTTP/2 Frames, von welchen 6 gesendet und 5 empfangen wurden.
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|r|}
+        \hline
+        \textbf{Setting} & \textbf{Value} \\ \hline
+        Header Table Size & 4096 \\ \hline
+        Enable PUSH & 0 \\ \hline
+        Initial Window Size & 65535 \\ \hline
+        Max Frame Size & 16384 \\ \hline
+        Max Concurrent Streams & 100 \\ \hline
+        Max Header List Size & 65536 \\ \hline
+    \end{tabular}
+    \caption{HTTP/2 Settings Parameter}
+    \label{tab:http2_settings}
+\end{table}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|r|}
+        \hline
+        \textbf{Connection Window} & \textbf{Size} \\ \hline
+        Before & 65535 \\ \hline
+        After & 16842751 \\ \hline
+    \end{tabular}
+    \caption{Initiale Connection Window Sizes}
+    \label{tab:http2_window_sizes}
+\end{table}
+
+Für die ganze HTTP/2-Kommunikation wurden insegesamt 7 Frames auf Verrbindungsschicht verschickt, diese 7 Frames enthalten 11 HTTP/2 Frames (Connection Preface eingerechnet), von welchen 6 gesendet und 5 empfangen wurden.
 Dabei wurden insgesamt 1419 Bytes übertragen, von welchen 161 Bytes gesendet und 1258 Bytes empfangen wurden.~\ref{tab:packet_size}
 
 Bei der beobachtbaren HTTP/2-Kommunikation werden Settings nur über Stream 0 gesendet, während Stream 1 hier für die Get Anfrage genutzt wird.
@@ -116,18 +116,18 @@ HAPACK ist ein Header-Komprimierungsverfahren, das in HTTP/2 verwendet wird, um 
 Außerdem bietet es durch die Komprimierung der Header eine verbesserte Sicherheit, da es die Angriffsfläche für bestimmte Arten von Angriffen reduziert~\cite{rfc9113_http2_headers}.
 Die Kompremierung erfolgt durch die Verwendung von statischen und dynamischen Tabellen, die die Header-Felder und deren Werte speichern.
 Jeder Enpunkt verwaltet zwei dynamische Tabellen nach dem First-In-First-Out (FIFO) Prinzip, eine für das Kodieren und eine für das Dekodieren.
-Die Größe der dynamischen Tabellen kann durch die Settings Frames angepasst werden, um die Effizienz der Komprimierung zu optimieren.
+Die Größe der dynamischen Tabellen kann durch die Settings Frames angepasst werden.
 In unserem Fall wurde die Header table size auf 4096 Bytes eingestellt, was bedeutet, dass die dynamische Tabelle bis zu 4096 Bytes an Header-Feldern und Werten speichern kann.
-Die statische Tabelle enthält eine vordefinierte Liste von häufig verwendeten Header-Feldern und Werten, die von beiden Endpunkten geteilt wird, um die Komprimierung weiter zu verbessern.
+Die statische Tabelle enthält eine vordefinierte Liste von häufig verwendeten Header-Feldern und Werten, die von beiden Endpunkten geteilt wird.
 Die dynamische Tabelle wird während der Kommunikation aktualisiert, um neue Header-Felder und Werte aufzunehmen, die nicht in der statischen Tabelle enthalten sind.
 Dabei gibt es verschiedene Szenarien.
 Wir betrachten immer ein Key-Value Paar, also ein Header-Feld und dessen Wert.
 Dabei kann entweder der Key in der dynamischen Tabelle vorhanden sein, oder die Kombination aus Key und Value, oder keines von beiden.
-Wenn etwas in der dynamischen Tabelle vorhanden ist, wird ein Index verwendet, um auf das entsprechende Key-Value Paar zu verweisen, was die Größe der übertragenen Header reduziert.~\cite{rfc7541_http2_hpack}
+Wenn etwas in der dynamischen Tabelle vorhanden ist, wird ein Index verwendet, so kann auf das entsprechende Key-Value Paar verwiesen werden, was die Größe der übertragenen Header reduziert.~\cite{rfc7541_http2_hpack}
 
 Beispielhaft kann Paket 7 betrachtet werden (Die HTTP/2 Header Frame mit der Get Anfrage).
-In diesem Paket wird die Get Anfrage gesendet, dabei ist der Key ":method" mit dem Wert "GET" in der statischen Tabelle vorhanden.
+In diesem Paket wird die Get Anfrage gesendet, dabei ist der Key \textit{:method} mit dem Wert \textit{GET} in der statischen Tabelle vorhanden.
 Damit ist für die Übertragung nur 1 Byte notwendig, während die Übertragung des Key-Value Paares ohne Komprimierung mindestens 11 Bytes benötigen würde.
 
-Im selben Paket wird der Key "user-agent" mit dem Wert "python-httpx/0.28.1" übertragen, dabei ist der Key in der statischen Tabelle vorhanden, aber die Kombination aus Key und Value nicht.
-Daher wird ein Index für den Key "user-agent" verwendet, aber der Wert "python-httpx/0.28.1" wird nicht indiziert und anders komprimiert übertragen, was insgesamt 16 Bytes benötigt.
+Im selben Paket wird der Key \textit{user-agent} mit dem Wert \textit{python-httpx/0.28.1} übertragen, dabei ist der Key in der statischen Tabelle vorhanden, aber die Kombination aus Key und Value nicht.
+Daher wird ein Index für den Key \textit{user-agent} verwendet, aber der Wert \textit{python-httpx/0.28.1} wird nicht indiziert und anders komprimiert übertragen, was insgesamt 16 Bytes benötigt.
