@@ -1,2 +1,35 @@
 \subsection{Ablaufbeschreibung eines HTTP/2-Clients über h2c}
 
+Settings Austausch
+
+\begin{enumerate}
+    \item TCP Handshake
+    \subitem Client sendet SYN \textrightarrow Verbidnungsanfrage (Pakete 3)
+    \subitem Server antwortet mit SYN-ACK \textrightarrow Verbindungsbestätigung (Pakete 4)
+    \subitem Client bestätigt mit ACK \textrightarrow Verbindung steht  (Pakete 5)
+    \item HTTP/2 Connection Preface \textrightarrow Info über die Unterstützung von HTTP/2 (Paket 6)
+    \item SETTINGS Frame \textrightarrow Konfiguration der Verbindung (Paket 6)
+    \item Window Update Frame \textrightarrow Erlaubt dem Server, mehr Daten zu senden (Paket 6)
+    \item Server sendet SETTINGS Frame (Paket 10)
+    \item Client bestätigt SETTINGS Frame (Paket 12)
+    \item Server bestätigt SETTINGS Frame (Paket 13)
+\end{enumerate}
+
+HPACK Kodierung
+
+\begin{enumerate}
+     \item Client sendet HTTP/2 HEADERS Frame mit der HPACK-kodierten Anfrage und nutzt dafür seine Kodierungstabelle
+     \item Server empfängt HEADERS Frame 
+     \item Server dekodiert HPACK-kodierte Header 
+     \item Server aktualisiert die dynamische Dekodierungstabelle mit den neuen Headern
+     \item Server verarbeitet die Anfrage und bereitet die Antwort mit HPACK Kodierung mit der dynamischen Kodierungstabelle vor
+\end{enumerate}
+
+Antworten Verarbeiten
+
+Der Client wartet bis alle Frames mit den entsprechenden Stream-IDs empfangen wurden und setzt die HTTP Nachricht zusammen. Sobald die Nachricht vollständig ist, verarbeitet der Client die Antwort entsprechend der HTTP/2 Spezifikation, z.B. durch Anzeigen der Webseite oder Speichern der Daten.
+
+Streams verwalten
+
+Jede neue Anfrage öffnet einen neuen Stream mit einer neuen Stream-ID. Ein Thread könnte pro Stream laufen und den HTTP/2-Frames erstellen.
+Dann wird auf der anderen Seite das Pakte empfangen und basierend auf der Stream ID zugeordnet und verarbeitet. Sobald die Antwort vollständig ist, wird der Stream geschlossen.
