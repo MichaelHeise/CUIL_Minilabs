@@ -34,6 +34,8 @@ Die Settings~\ref{tab:http2_settings} enthalten Informationen über die unterst�
     \caption{Initiale Connection Window Sizes}\label{tab:http2_window_sizes}
 \end{table}
 
+\FloatBarrier
+
 Für die ganze HTTP/2-Kommunikation wurden insgesamt 7 Frames auf Verbindungsschicht verschickt, diese 7 Frames enthalten 10 HTTP/2 Frames sowie das Connection Preface, welches gemäß RFC 9113 §3.4~\cite{rfc9113_http2_headers} kein HTTP/2 Frame ist, von welchen 5 HTTP/2 Frames gesendet und 5 empfangen wurden.
 Dabei wurden insgesamt 1419 Bytes übertragen, von welchen 161 Bytes gesendet und 1258 Bytes empfangen wurden.~\ref{tab:packet_size}
 
