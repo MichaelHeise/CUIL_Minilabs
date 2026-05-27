@@ -25,8 +25,7 @@ Die Header bestehen aus einem Header Name und einem Header value getrennt durch 
         User-Agent & python-httpx/0.28.1 \\
         \hline
     \end{tabular}
-    \caption{HTTP/1.1 Get Anfrage in der pcapng Datei}
-    \label{tab:http11-header-request}
+    \caption{HTTP/1.1 Get Anfrage in der pcapng Datei}\label{tab:http11-header-request}
 \end{table}
 
 Der Payload bei der Anfrage ist 0 Bytes groß, da es sich um eine Get Anfrage handelt, die nur aus dem Header besteht.
@@ -42,7 +41,7 @@ Der Payload bei der Anfrage ist 0 Bytes groß, da es sich um eine Get Anfrage ha
         Accept-Ranges & bytes \\
         Content-Length & 1056 \\
         Content-Type & text/html; charset=utf-8 \\
-        Etag & "da02fmydfj7ktc" \\
+        Etag & \texttt{da02fmydfj7ktc} \\
         Last-Modified & Mon, 19 May 2025 10:30:02 GMT \\
         Server & Caddy \\
         Vary & Accept-Encoding \\
@@ -51,22 +50,21 @@ Der Payload bei der Anfrage ist 0 Bytes groß, da es sich um eine Get Anfrage ha
         \textbf{Body} & 1056 Bytes \\
         \hline
     \end{tabular}
-    \caption{HTTP/1.1 Antwort in der pcapng Datei}
-    \label{tab:http11-header-response}
+    \caption{HTTP/1.1 Antwort in der pcapng Datei}\label{tab:http11-header-response}
 \end{table}
 
 Die HTTP/1.1 Antwort besteht aus einem Start Line, gefolgt von Headern und einem Body. Dabei ist der Payload (Body) 1056 Bytes groß, wie im Content-Length Header angegeben~\ref{tab:http11-header-response}.
 Die HTTP/1.1 Kommunikation in der pcapng Datei entspricht somit dem Standard und es gibt keine Auffälligkeiten oder Besonderheiten anzumerken.
 
 Für die ganze Kommunikation mit dem Server wurden 12 Frames auf der Verbindungsschicht ausgetauscht, davon waren 10 TCP Pakete und 2 HTTP Pakete.
-Für die HTTP/1.1 Anfrage wurde 1 HTTP Paket gesendet und für die HTTP/1.1 Antwort wurde 1 HTTP Paket empfangen. 
+Für die HTTP/1.1 Anfrage wurde 1 HTTP Paket gesendet und für die HTTP/1.1 Antwort wurde 1 HTTP Paket empfangen.
 Die Anfrage war 168 Bytes groß.
 Die Antwort war 1304 Bytes groß, wobei Header und Body des HTTP/1.1 über 2 TCP Segmente übertragen wurden.
 
-\subsubsection{DNS Cache in der pcapng}
+\subsubsection*{DNS Cache in der pcapng}
 Unabhängig von der HTTP/1.1 Kommunikation fällt in der pcapng Datei eine Besonderheit auf.
 Die TCP Verbindung zum Server wird über IPv6 gestartet bevor die Antwort des DNS Servers die URL in eine IPv6 Adresse aufgelöst hat.
-Das is in sofern ungewöhnlich, da der Client diese die Adresse hinter der URL eigentlich erst nach der DNS Abfrage kennen sollte, um die TCP Verbindung zum Server zu starten.
+Das ist insofern ungewöhnlich, als der Client die Adresse hinter der URL eigentlich erst nach der DNS Abfrage kennen sollte, um die TCP Verbindung zum Server zu starten.
 Die wahrscheinlichste Erklärung ist, dass die IP Adresse bereits in einem der DNS Caches lag.
 DNS Anfragen werden auf vielen Ebenen gecached, wie zum Beispiel im Betriebssystem, im Browser, Router oder in einem lokalen DNS Server.
 Wobei in unserem Fall wahrscheinlich der DNS Cache des Betriebssystems die IP Adresse vorhielt, da kein Browser genutzt wurde und Kommunikation mit dem lokalen DNS Server oder dem Router offensichtlich nicht abgewartet wurde.

@@ -4,19 +4,18 @@ Für alle Anfragen wurde ein einfaches Python Script verwendet, welches die TCP-
 
 \codeblock{../connection.py}{Python Script zum Aufbau von TCP-Verbindungen und Durchführung von HTTP Anfragen}{code:connection}
 
-Das Script nutzt für die Anfragen die  \texttt{httpx} Bibliothek~\cite{httpx_http2}, welche die TCP Verbindung für HTTP Anfragen vereinfacht.
+Das Script nutzt für die Anfragen die \texttt{httpx} Bibliothek~\cite{httpx_http2}, welche die TCP Verbindung für HTTP Anfragen vereinfacht.
 Es werden die HTTP Versionen 1.1 und 2 unterstützt, welche über die Kommandozeile ausgewählt werden können~\ref{code:connection-help}.
 Das Script gibt die Antwort des Servers auf der Kommandozeile aus.
 
-\codeblock{res/connection_help.txt}{Ausgabe der Python script Optionen über den Befehl \texttt{python connection.py --help}}{code:connection-help}
+\codeblock{res/connection_help.txt}{Ausgabe der Python Script Optionen über den Befehl \texttt{python connection.py --help}}{code:connection-help}
 
 \FloatBarrier
 
-Die HTTP/2-Kommunikation zwischend dem Client und dem Server wurde über Wireshark analysiert.
+Die HTTP-Kommunikation zwischen dem Client und dem Server wurde über Wireshark analysiert.
 Dabei wurden die folgenden Schritte durchgeführt:
 
-\begin{enumerate}
-    \label{enum:wireshark_capture_method}
+\begin{enumerate}\label{enum:wireshark_capture_method}
     \item Starten von Wireshark und Auswahl der entsprechenden Netzwerkschnittstelle, um den Datenverkehr zu erfassen.
     \item Anfrage an die Webseite mit dem Python Skript~\ref{code:connection} senden, um die HTTP-Kommunikation zu initiieren.
     \subitem \texttt{python3 connection.py --http\_version ...}
@@ -30,18 +29,18 @@ Dabei wurden die folgenden Schritte durchgeführt:
 Zur Analyse der Kommunikation wurden einige Filterbefehle in Wireshark verwendet, um die relevanten Pakete zu identifizieren und zu isolieren.
 
 \begin{enumerate}
-    \item \texttt{frame.number >= \{ErstesPaketNummer\} \&\& frame.number <= \{LetztesPaketNummer\}}:\newline Dieser Filter wurde verwendet, um die Pakete zu isolieren, die während der HTTP-Kom-munikation zwischen Client und Server ausgetauscht wurden. Dabei wurden die Paketnummern des ersten und letzten relevanten Pakets angegeben, um nur diese Pakete anzuzeigen und nur diese in die Datei zu exportieren.
+    \item \texttt{frame.number >= \{ErstesPaketNummer\} \&\& frame.number <= \{LetztesPaketNummer\}}:\newline Dieser Filter wurde verwendet, um die Pakete zu isolieren, die während der HTTP-Kommunikation zwischen Client und Server ausgetauscht wurden. Dabei wurden die Paketnummern des ersten und letzten relevanten Pakets angegeben, um nur diese Pakete anzuzeigen und nur diese in die Datei zu exportieren.
     \item \texttt{http} und \texttt{http2}: Dieser Filter wurde verwendet, um nur die HTTP-Pakete anzuzeigen, die während der Kommunikation ausgetauscht wurden. Dadurch konnten die HTTP-Anfragen und -Antworten isoliert und analysiert werden, ohne von anderen Paketen wie DNS oder TCP Handshake Paketen abgelenkt zu werden.
     \item \texttt{tcp} Dieser Filter wurde verwendet, um die TCP-Pakete anzuzeigen, die während der Kommunikation ausgetauscht wurden. Dadurch konnten der Aufbau der TCP-Verbindung und die Übertragung der HTTP-Pakete über TCP analysiert werden.
     \item \texttt{http2.stream\_id == ...}: Dieser Filter wurde verwendet, um die HTTP/2-Pakete anzuzeigen, die zum einem bestimmten Stream gehören. So kann beispielsweise nur der Stream mit der Anfrage oder nur der Stream mit dem Einstellungsaustausch angezeigt werden, um die Kommunikation in diesem Stream genauer zu analysieren.
 \end{enumerate}
 
 Nach dem Filtern der Frames wurden mit Wireshark die Details der einzelnen Pakete analysiert.
-Dafür wurde das aufklappen der entsprechenden Netzwerkschicht genutzt, so sind Details wie Größe der Pakete, Flags, Header und Payload sichtbar, um die Kommunikation zwischen Client und Server zu verstehen.~\ref{fig:wireshark_capture_method}
+Dafür wurde das Aufklappen der entsprechenden Netzwerkschicht genutzt, so sind Details wie Größe der Pakete, Flags, Header und Payload sichtbar, um die Kommunikation zwischen Client und Server zu verstehen.~\ref{fig:wireshark_capture_method}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{res/wireshark_capture_method.png}
-    \caption{Analyse der HTTP/2 Kommunikation in Wireshark. In der roten Box befindet sich der Bereich in dem die Netzwerkschichten genauer betrachtet werden könnnen, um Details wie Flags, Header und Payload zu analysieren. In der grünen Box die Größe des Ausgewählten Teils des Paketes. Und in der blauen Box die Filter, um die relevanten Pakete zu isolieren.}
+    \caption{Analyse der HTTP-Kommunikation in Wireshark. In der roten Box befindet sich der Bereich in dem die Netzwerkschichten genauer betrachtet werden können, um Details wie Flags, Header und Payload zu analysieren. In der grünen Box die Größe des ausgewählten Teils des Paketes. Und in der blauen Box die Filter, um die relevanten Pakete zu isolieren.}
     \label{fig:wireshark_capture_method}
 \end{figure}

@@ -1,6 +1,6 @@
 # Minilab 1
 
-# Connection.py
+## Connection.py
 
 Ich habe schonmal eine Pyhton Datei geschrieben, die eine high level library nutzt um die Anfragen zu schicken, die im Assignement notwedig sind.
 
@@ -21,7 +21,7 @@ python connection.py
 python connection.py -h
 
 # HTTP/2 nutzen
-python connection.py -http_version 2
+python connection.py --http_version 2
 ```
 
 Das script nimmt mehere parameter entgegen sodass wir die meisten Anfragen stellen können. Anschließen kann man falls nötig das Script noch erweitern.

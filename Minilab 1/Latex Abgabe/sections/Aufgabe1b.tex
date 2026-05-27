@@ -5,7 +5,7 @@ Der Client fragt die TCP-Verbindung zum Server an, und der Server antwortet mit 
 Der Client bestätigt den Verbindungsaufbau mit einem ACK-Paket, wodurch die TCP-Verbindung etabliert wird.
 Nach dem erfolgreichen Aufbau der TCP-Verbindung wird diese für die HTTP/2-Kommunikation genutzt, um Anfragen und Antworten zwischen Client und Server auszutauschen.
 Dabei sendet der Client ein Connection Preface, Settings und Window Update.
-Das Connection Preface is ein einzigartiger String, der dem Server signalisiert, dass der Client HTTP/2 unterstützt, während die Settings und Window Update Pakete die Parameter für die Kommunikation festlegen.
+Das Connection Preface ist ein einzigartiger String, der dem Server signalisiert, dass der Client HTTP/2 unterstützt, während die Settings und Window Update Pakete die Parameter für die Kommunikation festlegen.
 Die Settings~\ref{tab:http2_settings} enthalten Informationen über die unterstützten Funktionen und Einstellungen des Clients, während die Window Update Pakete~\ref{tab:http2_window_sizes} die Flusskontrolle für die Datenübertragung regeln.
 
 \begin{table}[h]
@@ -20,8 +20,7 @@ Die Settings~\ref{tab:http2_settings} enthalten Informationen über die unterst�
         Max Concurrent Streams & 100 \\ \hline
         Max Header List Size & 65536 \\ \hline
     \end{tabular}
-    \caption{HTTP/2 Settings Parameter}
-    \label{tab:http2_settings}
+    \caption{HTTP/2 Settings Parameter}\label{tab:http2_settings}
 \end{table}
 
 \begin{table}[h]
@@ -32,17 +31,18 @@ Die Settings~\ref{tab:http2_settings} enthalten Informationen über die unterst�
         Before & 65535 \\ \hline
         After & 16842751 \\ \hline
     \end{tabular}
-    \caption{Initiale Connection Window Sizes}
-    \label{tab:http2_window_sizes}
+    \caption{Initiale Connection Window Sizes}\label{tab:http2_window_sizes}
 \end{table}
 
-Für die ganze HTTP/2-Kommunikation wurden insegesamt 7 Frames auf Verrbindungsschicht verschickt, diese 7 Frames enthalten 11 HTTP/2 Frames (Connection Preface eingerechnet), von welchen 6 gesendet und 5 empfangen wurden.
+\FloatBarrier
+
+Für die ganze HTTP/2-Kommunikation wurden insgesamt 7 Frames auf Verbindungsschicht verschickt, diese 7 Frames enthalten 10 HTTP/2 Frames sowie das Connection Preface, welches gemäß RFC 9113 §3.4~\cite{rfc9113_http2_headers} kein HTTP/2 Frame ist, von welchen 5 HTTP/2 Frames gesendet und 5 empfangen wurden.
 Dabei wurden insgesamt 1419 Bytes übertragen, von welchen 161 Bytes gesendet und 1258 Bytes empfangen wurden.~\ref{tab:packet_size}
 
 Bei der beobachtbaren HTTP/2-Kommunikation werden Settings nur über Stream 0 gesendet, während Stream 1 hier für die Get Anfrage genutzt wird.
-Außerdem werden Falgs wie End Headers, End Stream, Padded und Priority in den Header Frames verwendet, um die Struktur und Priorität der übertragenen Daten zu steuern.
+Außerdem werden Flags wie End Headers, End Stream, Padded und Priority in den Header Frames verwendet, um die Struktur und Priorität der übertragenen Daten zu steuern.
 Die Nutzlastgrößen variieren je nach Frame-Typ, wobei die Data Frames die größte Nutzlast aufweisen, da sie die eigentlichen Daten der HTTP-Anfrage und -Antwort enthalten.
-Eine weitere interessante Flag ist die ACK-Flag in den Settings Frames. Die ACK-Falg wird genutzt um das erhalten der zuvor gesendeten Settings und deren Anwendung zu bestätigen, dabei enthält dieser HTTP/2 Frame nie eine Nutzlast~\cite{rfc9113_http2_headers}.~\ref{tab:packet_details}
+Eine weitere interessante Flag ist die ACK-Flag in den Settings Frames. Die ACK-Flag wird genutzt um das erhalten der zuvor gesendeten Settings und deren Anwendung zu bestätigen, dabei enthält dieser HTTP/2 Frame nie eine Nutzlast~\cite{rfc9113_http2_headers}.~\ref{tab:packet_details}
 
 
 \begin{table}
@@ -67,22 +67,21 @@ Eine weitere interessante Flag ist die ACK-Flag in den Settings Frames. Die ACK-
                 16 & Empfangen & 1065 \\
                 \hline
             \end{tabular}
-            
+
             \vspace{0.2cm}
-            
+
             \begin{tabular}{|c|c|}
                 \hline
                 \textbf{Gesamt Gesendet} & \textbf{161} \\
                 \textbf{Gesamt Empfangen} & \textbf{1258} \\
                 \textbf{Gesamt} & \textbf{1419} \\
                 \textbf{Frames Gesamt} & \textbf{7} \\
-                \textbf{HTTP/2 Frames Gesamt} & \textbf{11} \\
+                \textbf{HTTP/2 Frames Gesamt} & \textbf{10} \\
                 \hline
             \end{tabular}
         \end{minipage}
     \end{adjustbox}
-    \caption{Gesendete und empfangene HTTP/2 Frames mit ihrer Größe in Bytes}
-    \label{tab:packet_size}
+    \caption{Gesendete und empfangene HTTP/2 Frames mit ihrer Größe in Bytes}\label{tab:packet_size}
 \end{table}
 
 \begin{table}
@@ -92,7 +91,7 @@ Eine weitere interessante Flag ist die ACK-Flag in den Settings Frames. Die ACK-
             \hline
             \textbf{Paketnummer} & \textbf{Pakettyp} & \textbf{Stream-ID} & \textbf{Flags} & \textbf{Nutzlastgrößen (Bytes)} \\
             \hline
-            6 & Connection preface & Magic & - & 0 \\
+            6 & Connection Preface & -- & - & 0 \\
             6 & Settings & 0 & ACK=False & 36 \\
             6 & Window Update & 0 & - & 4 \\
             7 & Headers & 1 & End Headers=True, End Stream=True, Padded=False, Priority=False & 48 \\
@@ -106,17 +105,16 @@ Eine weitere interessante Flag ist die ACK-Flag in den Settings Frames. Die ACK-
             \hline
         \end{tabular}
     \end{adjustbox}
-    \caption{HTTP/2 Paketdetails}
-    \label{tab:packet_details}
+    \caption{HTTP/2 Paketdetails}\label{tab:packet_details}
 \end{table}
 
-\subsubsection{HPACK}
+\subsubsection*{HPACK}
 
-HAPACK ist ein Header-Komprimierungsverfahren, das in HTTP/2 verwendet wird, um die Größe der übertragenen Header zu reduzieren und somit die Effizienz der Kommunikation zu verbessern.
-Außerdem bietet es durch die Komprimierung der Header eine verbesserte Sicherheit, da es die Angriffsfläche für bestimmte Arten von Angriffen reduziert~\cite{rfc9113_http2_headers}.
-Die Kompremierung erfolgt durch die Verwendung von statischen und dynamischen Tabellen, die die Header-Felder und deren Werte speichern.
-Jeder Enpunkt verwaltet zwei dynamische Tabellen nach dem First-In-First-Out (FIFO) Prinzip, eine für das Kodieren und eine für das Dekodieren.
-Die Größe der dynamischen Tabellen kann durch die Settings Frames angepasst werden.
+HPACK ist ein Header-Komprimierungsverfahren, das in HTTP/2 verwendet wird, um die Größe der übertragenen Header zu reduzieren und somit die Effizienz der Kommunikation zu verbessern.
+Außerdem bietet es durch die Komprimierung der Header eine verbesserte Sicherheit, da es die Angriffsfläche für bestimmte Arten von Angriffen reduziert~\cite{rfc7541_http2_hpack}.
+Die Komprimierung erfolgt durch die Verwendung von statischen und dynamischen Tabellen, die die Header-Felder und deren Werte speichern.
+Jeder Endpunkt verwaltet zwei dynamische Tabellen nach dem First-In-First-Out (FIFO) Prinzip, eine für das Kodieren und eine für das Dekodieren.
+Die Größe der dynamischen Tabellen kann durch die Settings Frames angepasst werden, um die Effizienz der Komprimierung zu optimieren.
 In unserem Fall wurde die Header table size auf 4096 Bytes eingestellt, was bedeutet, dass die dynamische Tabelle bis zu 4096 Bytes an Header-Feldern und Werten speichern kann.
 Die statische Tabelle enthält eine vordefinierte Liste von häufig verwendeten Header-Feldern und Werten, die von beiden Endpunkten geteilt wird.
 Die dynamische Tabelle wird während der Kommunikation aktualisiert, um neue Header-Felder und Werte aufzunehmen, die nicht in der statischen Tabelle enthalten sind.
