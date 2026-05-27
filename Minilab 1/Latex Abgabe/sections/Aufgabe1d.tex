@@ -3,7 +3,7 @@
 
 In diesem Abschnitt werden die beiden HTTP-Austausche miteinander verglichen, um die Unterschiede in der Anzahl der gesendeten Bytes auf der Verbindungsschicht und der gesendeten HTTP-Bytes zu analysieren.
 
-\subsubsection{Übertragene Bytes und Pakete}
+\subsubsection*{Übertragene Bytes und Pakete}
 
 HTTP/2 nutzt im Vergleich zu HTTP/1.1 Header-Komprimierung und teilt Nachrichten in mehrere HTTP-Frames auf.
 
@@ -33,7 +33,7 @@ Dies lässt sich auch bei der Anzahl ausgetauschter TCP-Pakete beobachten.
 HTTP/2 benötigt mehr TCP-Pakete, um die Kommunikation zu etablieren und aufrechtzuerhalten, da Window Updates und Settings ausgetauscht werden.
 Im Gegensatz dazu benötigt HTTP/1.1 weniger TCP-Pakete, da es keine zusätzlichen Frames für die Verbindungsaushandlung verwendet.
 
-\subsubsection{Verbindungsaufbau Overhead}
+\subsubsection*{Verbindungsaufbau Overhead}
 
 Der Overhead beider Protokolle kann durch die Anzahl der gesendeten Bytes auf der Verbindungsschicht im Vergleich zu den gesendeten HTTP-Bytes bewertet werden.
 Bei der HTTP/1.1-Kommunikation wurden 778 Bytes auf der Verbindungsschicht gesendet, während nur 168 Bytes HTTP-Daten übertragen wurden, damit wurden etwa \textbf{21.6\%} der gesendeten Bytes für die eigentlichen HTTP-Daten verwendet.
@@ -44,7 +44,7 @@ Außerdem benötigt HTTP/2 263 Bytes gesendet vom Client für den initialen Sett
 Dies bedeutet auch, dass HTTP/2 immer effizienter wird je mehr Anfragen über die gleiche Verbindung gesendet werden.
 Der initiale Verbindungsoverhead wird auf mehrere Anfragen verteilt, jede weitere Anfrage ist aber deutlich effizienter als bei HTTP/1.1, da die Header-Komprimierung und die Multiplexing-Fähigkeiten von HTTP/2 genutzt werden können.
 
-\subsubsection{HTTP/2 Multiplexing}
+\subsubsection*{HTTP/2 Multiplexing}
 Ein weiterer wichtiger Unterschied zwischen HTTP/1.1 und HTTP/2 ist die Fähigkeit von HTTP/2, mehrere Anfragen gleichzeitig über die gleiche Verbindung zu multiplexen.
 HTTP/2 nutzt dafür streams.
 Dabei läuft eine Anfrage pro Stream.
