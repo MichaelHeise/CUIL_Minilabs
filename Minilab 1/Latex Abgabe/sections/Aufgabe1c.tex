@@ -64,7 +64,7 @@ Die Antwort war 1304 Bytes groß, wobei Header und Body des HTTP/1.1 über 2 TCP
 \subsubsection*{DNS Cache in der pcapng}
 Unabhängig von der HTTP/1.1 Kommunikation fällt in der pcapng Datei eine Besonderheit auf.
 Die TCP Verbindung zum Server wird über IPv6 gestartet bevor die Antwort des DNS Servers die URL in eine IPv6 Adresse aufgelöst hat.
-Das is in sofern ungewöhnlich, da der Client diese die Adresse hinter der URL eigentlich erst nach der DNS Abfrage kennen sollte, um die TCP Verbindung zum Server zu starten.
+Das ist insofern ungewöhnlich, als der Client die Adresse hinter der URL eigentlich erst nach der DNS Abfrage kennen sollte, um die TCP Verbindung zum Server zu starten.
 Die wahrscheinlichste Erklärung ist, dass die IP Adresse bereits in einem der DNS Caches lag.
 DNS Anfragen werden auf vielen Ebenen gecached, wie zum Beispiel im Betriebssystem, im Browser, Router oder in einem lokalen DNS Server.
 Wobei in unserem Fall wahrscheinlich der DNS Cache des Betriebssystems die IP Adresse vorhielt, da kein Browser genutzt wurde und Kommunikation mit dem lokalen DNS Server oder dem Router offensichtlich nicht abgewartet wurde.
