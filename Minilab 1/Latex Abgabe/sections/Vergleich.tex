@@ -61,7 +61,7 @@ Ein Stream kann also als logische Verbindung innerhalb der TCP Verbindung betrac
     \label{fig:multiplexing}
 \end{figure}
 
-In unserem HTTP/2-Austausch~\ref{fig:multiplexing} 7 Link Layer Frames mit HTTP2 Protokoll wurden gesendet. Dabei wurde erst der Settings Austausch über Stream 0 initiert, bevor die GET-Anfrage über Stream 1 gesendet wurde.
-Nachdem dann die Kommunikation über Stream 0 abgeschloosen wurde, wurde die Response der Get-Anfrage über Stream 1 empfangen.
-Multiplexing war hier nicht in größerm Stile notwenig und auch nicht möglich, da der Settingsaustausch zwingend erfolgt sein muss, bevor Antowrten gesendet werden.
+In unserem HTTP/2-Austausch~\ref{fig:multiplexing} wurden 7 Link Layer Frames mit HTTP/2-Protokoll gesendet. Dabei wurde erst der Settings-Austausch über Stream 0 initiiert, bevor die GET-Anfrage über Stream 1 gesendet wurde.
+Nachdem dann die Kommunikation über Stream 0 abgeschlossen wurde, wurde die Response der GET-Anfrage über Stream 1 empfangen.
+Multiplexing war hier nicht in größerem Stil notwendig und auch nicht möglich, da der Settings-Austausch zwingend erfolgt sein muss, bevor Antworten gesendet werden.
 Sonst fehlen Kommunikationsparameter für die Streams.
