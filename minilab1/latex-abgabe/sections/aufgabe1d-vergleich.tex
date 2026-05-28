@@ -18,10 +18,10 @@ HTTP/2 nutzt im Vergleich zu HTTP/1.1 Header-Komprimierung und teilt Nachrichten
         Client (HTTP) & 168 Bytes & 161 Bytes \\
         Server (HTTP) & 1304 Bytes & 1258 Bytes \\
         \hline
-        \textbf{TCP Pakete Insgesamt} & 12 & 17 \\
+        \textbf{TCP-Pakete Insgesamt} & 12 & 17 \\
         \hline
     \end{tabular}
-    \caption{Anzahl der gesendeten Bytes auf der Verbindungsschicht im HTTP/1.1- und HTTP/2-Austausch inklusive TCP Paketen und nur HTTP betrachtet.}
+    \caption{Anzahl der gesendeten Bytes auf der Verbindungsschicht im HTTP/1.1- und HTTP/2-Austausch inklusive TCP-Paketen und nur HTTP betrachtet.}
     \label{tab:bytes}
 \end{table}
 
@@ -44,7 +44,7 @@ Außerdem benötigt HTTP/2 263 Bytes gesendet vom Client für den initialen Sett
 Dies bedeutet auch, dass HTTP/2 immer effizienter wird je mehr Anfragen über die gleiche Verbindung gesendet werden.
 Der initiale Verbindungsoverhead wird auf mehrere Anfragen verteilt, jede weitere Anfrage ist aber deutlich effizienter als bei HTTP/1.1, da die Header-Komprimierung und die Multiplexing-Fähigkeiten von HTTP/2 genutzt werden können.
 
-\subsubsection*{HTTP/2 Multiplexing}
+\subsubsection*{HTTP/2-Multiplexing}
 Ein weiterer wichtiger Unterschied zwischen HTTP/1.1 und HTTP/2 ist die Fähigkeit von HTTP/2, mehrere Anfragen gleichzeitig über die gleiche Verbindung zu multiplexen.
 HTTP/2 nutzt dafür streams.
 Dabei läuft eine Anfrage pro Stream.
@@ -52,7 +52,7 @@ Die Daten werden in Frames bestimmter Größe aufgeteilt, die unabhängig vonein
 Dabei bleibt die Reihenfolge der Frames innerhalb eines Streams erhalten, aber die Frames verschiedener Streams können in beliebiger Reihenfolge gesendet werden (Multiplexing).
 Das verhindert, dass eine Anfrage die Bearbeitung einer anderen blockiert, da die Frames verschiedener Streams verzahnt voneinander gesendet und empfangen werden können.
 Der Empfänger ordnet die Frames dann entsprechend der Stream-IDs.
-Ein Stream kann also als logische Verbindung innerhalb der TCP Verbindung betrachtet werden, die es ermöglicht, mehrere Anfragen gleichzeitig zu bearbeiten, ohne dass sie sich gegenseitig blockieren.
+Ein Stream kann also als logische Verbindung innerhalb der TCP-Verbindung betrachtet werden, die es ermöglicht, mehrere Anfragen gleichzeitig zu bearbeiten, ohne dass sie sich gegenseitig blockieren.
 
 \begin{figure}[h]
     \centering
