@@ -1,5 +1,9 @@
 \subsection{Reflexion und Diskussion}
 
+Die Analyse der HTTP-Kommunikation stellte wenige Herausforderungen dar.
+Die Unterscheidung zwischen Frames auf der Verbindungsschicht und HTTP/2-Frames war zunächst unklar, da mehrere HTTP/2-Frames in einem TCP-Paket übertragen werden können.
+Zudem hat die Klassifikation des Connection Preface Recherche gefordert, da es kein HTTP/2-Frame ist, sondern ein Magic String, der vor den Frames gesendet wird.
+
 HTTP/2 hat im Vergleich zu HTTP/1.1 einen Overhead bei der Initialisierung der Verbindung.
 Nach diesem Overhead werden aber die Vorteile von HTTP/2 deutlich.
 Durch HPACK sind die Header deutlich kleiner, was die Übertragung beschleunigt.
