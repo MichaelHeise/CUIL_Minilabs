@@ -8,8 +8,8 @@ Der Aufbau der HTTP/1.1-Pakete ist wie nach dem Standard zu erwarten~\ref{code:h
 \codeblock{res/http1-message-format.txt}{HTTP/1.1 Message Format~\cite{rfc9112_http11}}{code:http1-message-format}
 
 Dabei besteht die HTTP/1.1-Nachricht aus einem Start Line, gefolgt von Headern und einem optionalen Body.
-Die Start Line besteht aus einem Method, einem Request Target und einer HTTP-Version.
-Die Header bestehen aus einem Header Name und einem Header value getrennt durch einen Doppelpunkt, die Tabelle~\ref{tab:http11-header-request} zeigt den Aufbau der Get Anfrage in der pcapng Datei.
+Die Start Line besteht aus einer Method, einem Request Target und einer HTTP-Version.
+Die Header bestehen aus einem Header Name und einem Header-Value getrennt durch einen Doppelpunkt, die Tabelle~\ref{tab:http11-header-request} zeigt den Aufbau der Get Anfrage in der pcapng Datei.
 
 \begin{table}[h]
     \centering
@@ -67,5 +67,5 @@ Unabhängig von der HTTP/1.1-Kommunikation fällt in der pcapng Datei eine Beson
 Die TCP-Verbindung zum Server wird über IPv6 gestartet bevor die Antwort des DNS-Servers die URL in eine IPv6-Adresse aufgelöst hat.
 Das ist insofern ungewöhnlich, als der Client die Adresse hinter der URL eigentlich erst nach der DNS-Abfrage kennen sollte, um die TCP-Verbindung zum Server zu starten.
 Die wahrscheinlichste Erklärung ist, dass die IP-Adresse bereits in einem der DNS-Caches lag.
-DNS-Anfragen werden auf vielen Ebenen gecached, wie zum Beispiel im Betriebssystem, im Browser, Router oder in einem lokalen DNS-Server.
+DNS-Anfragen werden auf vielen Ebenen gecacht, wie zum Beispiel im Betriebssystem, im Browser, Router oder in einem lokalen DNS-Server.
 Wobei in unserem Fall wahrscheinlich der DNS-Cache des Betriebssystems die IP-Adresse vorhielt, da kein Browser genutzt wurde und Kommunikation mit dem lokalen DNS-Server oder dem Router offensichtlich nicht abgewartet wurde.

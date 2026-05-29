@@ -36,17 +36,17 @@ Im Gegensatz dazu benötigt HTTP/1.1 weniger TCP-Pakete, da es keine zusätzlich
 \subsubsection*{Verbindungsaufbau Overhead}
 
 Der Overhead beider Protokolle kann durch die Anzahl der gesendeten Bytes auf der Verbindungsschicht im Vergleich zu den gesendeten HTTP-Bytes bewertet werden.
-Bei der HTTP/1.1-Kommunikation wurden 778 Bytes auf der Verbindungsschicht gesendet, während nur 168 Bytes HTTP-Daten übertragen wurden, damit wurden etwa \textbf{21.6\%} der gesendeten Bytes für die eigentlichen HTTP-Daten verwendet.
-Im Gegensatz dazu wurden bei HTTP/2 943 Bytes auf der Verbindungsschicht gesendet, während nur 161 Bytes HTTP-Daten übertragen wurden, was etwa \textbf{17.1\%} der gesendeten Bytes für die HTTP-Daten entspricht.
+Bei der HTTP/1.1-Kommunikation wurden 778 Bytes auf der Verbindungsschicht gesendet, während nur 168 Bytes HTTP-Daten übertragen wurden, damit wurden etwa \textbf{21,6 \%} der gesendeten Bytes für die eigentlichen HTTP-Daten verwendet.
+Im Gegensatz dazu wurden bei HTTP/2 943 Bytes auf der Verbindungsschicht gesendet, während nur 161 Bytes HTTP-Daten übertragen wurden, was etwa \textbf{17,1 \%} der gesendeten Bytes für die HTTP-Daten entspricht.
 Bei dem Vergleich muss jedoch beachtet werden, dass HTTP/2 zusätzliche Frames für die Verbindungsaushandlung und Einstellungen verwendet, was zu einem höheren Overhead auf der Verbindungsschicht führt, aber gleichzeitig die Effizienz der HTTP-Datenübertragung verbessert.
 Deshalb nutzt HTTP/2 auf Anwendungsebene nur 57 Bytes für die Get-Anfrage, während HTTP/1.1 168 Bytes für die gleiche Anfrage benötigt.
-Außerdem benötigt HTTP/2 263 Bytes gesendet vom Client für den initialen Settings Austausch.
+Außerdem benötigt HTTP/2 263 Bytes, gesendet vom Client, für den initialen Settings Austausch.
 Dies bedeutet auch, dass HTTP/2 immer effizienter wird je mehr Anfragen über die gleiche Verbindung gesendet werden.
 Der initiale Verbindungsoverhead wird auf mehrere Anfragen verteilt, jede weitere Anfrage ist aber deutlich effizienter als bei HTTP/1.1, da die Header-Komprimierung und die Multiplexing-Fähigkeiten von HTTP/2 genutzt werden können.
 
 \subsubsection*{HTTP/2-Multiplexing}
 Ein weiterer wichtiger Unterschied zwischen HTTP/1.1 und HTTP/2 ist die Fähigkeit von HTTP/2, mehrere Anfragen gleichzeitig über die gleiche Verbindung zu multiplexen.
-HTTP/2 nutzt dafür streams.
+HTTP/2 nutzt dafür Streams.
 Dabei läuft eine Anfrage pro Stream.
 Die Daten werden in Frames bestimmter Größe aufgeteilt, die unabhängig voneinander gesendet und empfangen werden können.
 Dabei bleibt die Reihenfolge der Frames innerhalb eines Streams erhalten, aber die Frames verschiedener Streams können in beliebiger Reihenfolge gesendet werden (Multiplexing).

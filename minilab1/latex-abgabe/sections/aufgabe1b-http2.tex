@@ -37,13 +37,13 @@ Die Settings~\ref{tab:http2_settings} enthalten Informationen über die unterst�
 
 \FloatBarrier
 
-Für die ganze HTTP/2-Kommunikation wurden insgesamt 7 Frames auf Verbindungsschicht verschickt, diese 7 Frames enthalten 10 HTTP/2-Frames sowie das Connection Preface, welches gemäß RFC 9113 §3.4~\cite{rfc9113_http2_headers} kein HTTP/2-Frame ist, von welchen 5 HTTP/2-Frames gesendet und 5 empfangen wurden.
+Für die ganze HTTP/2-Kommunikation wurden insgesamt 7 Frames auf der Verbindungsschicht verschickt, diese 7 Frames enthalten 10 HTTP/2-Frames sowie das Connection Preface, welches gemäß RFC 9113 §3.4~\cite{rfc9113_http2_headers} kein HTTP/2-Frame ist, von welchen 5 HTTP/2-Frames gesendet und 5 empfangen wurden.
 Dabei wurden insgesamt 1419 Bytes übertragen, von welchen 161 Bytes gesendet und 1258 Bytes empfangen wurden.~\ref{tab:packet_size}
 
 Bei der beobachtbaren HTTP/2-Kommunikation werden Settings nur über Stream 0 gesendet, während Stream 1 hier für die Get Anfrage genutzt wird.
 Außerdem werden Flags wie End Headers, End Stream, Padded und Priority in den Header Frames verwendet, um die Struktur und Priorität der übertragenen Daten zu steuern.
 Die Nutzlastgrößen variieren je nach Frame-Typ, wobei die Data Frames die größte Nutzlast aufweisen, da sie die eigentlichen Daten der HTTP-Anfrage und -Antwort enthalten.
-Eine weitere interessante Flag ist die ACK-Flag in den Settings Frames. Die ACK-Flag wird genutzt um das erhalten der zuvor gesendeten Settings und deren Anwendung zu bestätigen, dabei enthält dieser HTTP/2-Frame nie eine Nutzlast~\cite{rfc9113_http2_headers}.~\ref{tab:packet_details}
+Eine weitere interessante Flag ist die ACK-Flag in den Settings Frames. Die ACK-Flag wird genutzt um das Erhalten der zuvor gesendeten Settings und deren Anwendung zu bestätigen, dabei enthält dieser HTTP/2-Frame nie eine Nutzlast~\cite{rfc9113_http2_headers}.~\ref{tab:packet_details}
 
 
 \begin{table}
@@ -122,7 +122,7 @@ Die dynamische Tabelle wird während der Kommunikation aktualisiert, um neue Hea
 Dabei gibt es verschiedene Szenarien.
 Wir betrachten immer ein Key-Value Paar, also ein Header-Feld und dessen Wert.
 Dabei kann entweder der Key in der dynamischen Tabelle vorhanden sein, oder die Kombination aus Key und Value, oder keines von beiden.
-Wenn etwas in der dynamischen Tabelle vorhanden ist, wird ein Index verwendet, so kann auf das entsprechende Key-Value Paar verwiesen werden, was die Größe der übertragenen Header reduziert.~\cite{rfc7541_http2_hpack}
+Wenn etwas in der dynamischen Tabelle vorhanden ist, wird ein Index verwendet, so kann auf das entsprechende Key-Value-Paar verwiesen werden, was die Größe der übertragenen Header reduziert.~\cite{rfc7541_http2_hpack}
 
 Beispielhaft kann Paket 7 betrachtet werden (Die HTTP/2 Header Frame mit der Get Anfrage).
 In diesem Paket wird die Get Anfrage gesendet, dabei ist der Key \textit{:method} mit dem Wert \textit{GET} in der statischen Tabelle vorhanden.

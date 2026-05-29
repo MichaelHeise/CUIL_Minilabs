@@ -4,10 +4,10 @@ Settings Austausch
 
 \begin{enumerate}
     \item TCP-Handshake
-    \subitem Client sendet SYN \textrightarrow Verbidnungsanfrage (Pakete 3)
+    \subitem Client sendet SYN \textrightarrow Verbindungsanfrage (Pakete 3)
     \subitem Server antwortet mit SYN-ACK \textrightarrow Verbindungsbestätigung (Pakete 4)
     \subitem Client bestätigt mit ACK \textrightarrow Verbindung steht  (Pakete 5)
-    \item HTTP/2 Connection Preface \textrightarrow Info über die Unterstützung von HTTP/2 (Paket 6)
+    \item HTTP/2 Connection Preface \textrightarrow Information über die HTTP/2-Unterstützung (Paket 6)
     \item SETTINGS Frame \textrightarrow Konfiguration der Verbindung (Paket 6)
     \item Window Update Frame \textrightarrow Erlaubt dem Server, mehr Daten zu senden (Paket 6)
     \item Server sendet SETTINGS Frame (Paket 10)
@@ -32,4 +32,4 @@ Der Client wartet bis alle Frames mit den entsprechenden Stream-IDs empfangen wu
 Streams verwalten
 
 Jede neue Anfrage öffnet einen neuen Stream mit einer neuen Stream-ID. Ein Thread könnte pro Stream laufen und den HTTP/2-Frames erstellen.
-Dann wird auf der anderen Seite das Pakte empfangen und basierend auf der Stream-ID zugeordnet und verarbeitet. Sobald die Antwort vollständig ist, wird der Stream geschlossen.
+Dann wird auf der anderen Seite das Paket empfangen und basierend auf der Stream-ID zugeordnet und verarbeitet. Sobald die Antwort vollständig ist, wird der Stream geschlossen.
