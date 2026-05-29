@@ -1,4 +1,4 @@
-\FloatBarrier
+\FloatBarrier{}
 \subsection{Analyse der HTTP/1.1-Kommunikation}
 
 Die HTTP/1.1-Kommunikation wurde analog zu der HTTP/2-Kommunikation aufgenommen~\ref{enum:wireshark_capture_method}.
@@ -15,7 +15,7 @@ Die Header bestehen aus einem Header Name und einem Header-Value getrennt durch 
     \centering
     \begin{tabular}{|c|c|}
         \hline
-        \textbf{Start Line} & GET /index.html HTTP/1.1\textbackslash r\textbackslash n \\
+        \textbf{Start Line} & GET /index.html HTTP/1.1\textbackslash{}r\textbackslash{}n \\
         \hline
         \textbf{Header Name} & \textbf{Header Value} \\
         \hline
@@ -35,7 +35,7 @@ Der Payload bei der Anfrage ist 0 Bytes groß, da es sich um eine Get Anfrage ha
     \centering
     \begin{tabular}{|c|c|}
         \hline
-        \textbf{Start Line} & HTTP/1.1 200 OK\textbackslash r\textbackslash n \\
+        \textbf{Start Line} & HTTP/1.1 200 OK\textbackslash{}r\textbackslash{}n \\
         \hline
         \textbf{Header Name} & \textbf{Header Value} \\
         \hline

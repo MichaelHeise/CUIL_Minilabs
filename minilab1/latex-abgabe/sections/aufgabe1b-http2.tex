@@ -1,4 +1,4 @@
-\FloatBarrier
+\FloatBarrier{}
 \subsection{Analyse der HTTP/2-Kommunikation}
 
 Über Wireshark können die versendeten Pakete im Detail nachverfolgt werden. Die Kommunikation beginnt dabei mit dem Aufbau einer TCP-Verbindung.
@@ -35,7 +35,7 @@ Die Settings~\ref{tab:http2_settings} enthalten Informationen über die unterst�
     \caption{Initiale Connection Window Sizes}\label{tab:http2_window_sizes}
 \end{table}
 
-\FloatBarrier
+\FloatBarrier{}
 
 Für die ganze HTTP/2-Kommunikation wurden insgesamt 7 Frames auf der Verbindungsschicht verschickt, diese 7 Frames enthalten 10 HTTP/2-Frames sowie das Connection Preface, welches gemäß RFC 9113 §3.4~\cite{rfc9113_http2_headers} kein HTTP/2-Frame ist, von welchen 5 HTTP/2-Frames gesendet und 5 empfangen wurden.
 Dabei wurden insgesamt 1419 Bytes übertragen, von welchen 161 Bytes gesendet und 1258 Bytes empfangen wurden.~\ref{tab:packet_size}
@@ -92,15 +92,15 @@ Eine weitere interessante Flag ist die ACK-Flag in den Settings Frames. Die ACK-
             \hline
             \textbf{Paketnummer} & \textbf{Pakettyp} & \textbf{Stream-ID} & \textbf{Flags} & \textbf{Nutzlastgrößen (Bytes)} \\
             \hline
-            6 & Connection Preface & -- & - & 0 \\
+            6 & Connection Preface & {--} & {-} & 0 \\
             6 & Settings & 0 & ACK=False & 36 \\
-            6 & Window Update & 0 & - & 4 \\
+            6 & Window Update & 0 & {-} & 4 \\
             7 & Headers & 1 & End Headers=True, End Stream=True, Padded=False, Priority=False & 48 \\
-            7 & Window Update & 1 & - & 4 \\
+            7 & Window Update & 1 & {-} & 4 \\
             10 & Settings & 0 & ACK=False & 24 \\
             12 & Settings & 0 & ACK=True & 0 \\
             13 & Settings & 0 & ACK=True & 0 \\
-            13 & Window Update & 0 & - & 4 \\
+            13 & Window Update & 0 & {-} & 4 \\
             14 & Headers & 1 & Priority=False, End Headers=True, End Stream=False, Padded=False & 117 \\
             16 & Data & 1 & End Stream=True, Padded=False & 1056 \\
             \hline

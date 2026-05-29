@@ -1,4 +1,4 @@
-\FloatBarrier
+\FloatBarrier{}
 \subsection{Vergleich der HTTP/1.1- und HTTP/2-Austausche}
 
 In diesem Abschnitt werden die beiden HTTP-Austausche miteinander verglichen, um die Unterschiede in der Anzahl der gesendeten Bytes auf der Verbindungsschicht und der gesendeten HTTP-Bytes zu analysieren.
@@ -21,8 +21,7 @@ HTTP/2 nutzt im Vergleich zu HTTP/1.1 Header-Komprimierung und teilt Nachrichten
         \textbf{TCP-Pakete Insgesamt} & 12 & 17 \\
         \hline
     \end{tabular}
-    \caption{Anzahl der gesendeten Bytes auf der Verbindungsschicht im HTTP/1.1- und HTTP/2-Austausch inklusive TCP-Paketen und nur HTTP betrachtet.}
-    \label{tab:bytes}
+    \caption{Anzahl der gesendeten Bytes auf der Verbindungsschicht im HTTP/1.1- und HTTP/2-Austausch inklusive TCP-Paketen und nur HTTP betrachtet.}\label{tab:bytes}
 \end{table}
 
 Basierend auf der Tabelle~\ref{tab:bytes} kann festgestellt werden, dass HTTP/2 im Vergleich zu HTTP/1.1 mehr Bytes auf der Verbindungsschicht sendet, sowohl vom Client als auch vom Server.
@@ -57,8 +56,7 @@ Ein Stream kann also als logische Verbindung innerhalb der TCP-Verbindung betrac
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{res/http2-multiplexing.png}
-    \caption{Stream 0 wird für die initiale Verbindungsaushandlung verwendet, während Stream 1 für die GET-Anfrage genutzt wird.}
-    \label{fig:multiplexing}
+    \caption{Stream 0 wird für die initiale Verbindungsaushandlung verwendet, während Stream 1 für die GET-Anfrage genutzt wird.}\label{fig:multiplexing}
 \end{figure}
 
 In unserem HTTP/2-Austausch~\ref{fig:multiplexing} wurden 7 Link Layer Frames mit HTTP/2-Protokoll gesendet. Dabei wurde erst der Settings-Austausch über Stream 0 initiiert, bevor die GET-Anfrage über Stream 1 gesendet wurde.
