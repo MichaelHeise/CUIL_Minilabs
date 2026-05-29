@@ -26,12 +26,12 @@ Im zweiten Versuch wurden die Befehle daher einzeln geschickt.
 
 \begin{table}[h]
     \centering
-    \begin{adjustbox}{width=\textwidth}
+    \begin{adjustbox}{max width=\textwidth}
         \begin{tabular}{|c|c|c|}
             \hline
             \textbf{Befehl} & \textbf{Serverantwort} & \textbf{Bedeutung} \\
             \hline
-            (\texttt{telnet udcm-wwu1.uni-muenster.de 25}) & \texttt{220 UDCM-WWU1\ldots{} ESMTP} & Server bereit, ESMTP unterstützt \\
+            (\texttt{telnet udcm-wwu1\ldots{} 25}) & \texttt{220 UDCM-WWU1\ldots{} ESMTP} & Server bereit, ESMTP unterstützt \\
             \hline
             \texttt{EHLO monkey.banana.com} & \texttt{250-} Capability-Liste & Client identifiziert sich, Server listet Erweiterungen \\
             \hline
@@ -41,7 +41,7 @@ Im zweiten Versuch wurden die Befehle daher einzeln geschickt.
             \hline
             \texttt{DATA} & \texttt{354 go ahead} & Server bereit für Nachrichteninhalt \\
             \hline
-            (\textit{Header} + \textit{Body}) + \texttt{.} & \texttt{250 ok: Message 406219343 accepted} & Nachricht zugestellt/akzeptiert \\
+            (\textit{Header} + \textit{Body}) + \texttt{.} & \texttt{250 ok} & Nachricht zugestellt/akzeptiert \\
             \hline
             \texttt{QUIT} & \texttt{221 UDCM-WWU1\ldots{}} & Verbindung korrekt beendet \\
             \hline

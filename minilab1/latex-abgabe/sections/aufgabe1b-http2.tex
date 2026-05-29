@@ -48,41 +48,32 @@ Eine weitere interessante Flag ist die ACK-Flag in den Settings Frames. Die ACK-
 
 \begin{table}
     \centering
-    \begin{adjustbox}{width=\textwidth}
-        \begin{minipage}{\textwidth}
-            \centering
-            \begin{tabular}{|c|c|c|}
-                \hline
-                \textbf{Paketnummer} & \textbf{Empfangen oder gesendet} & \textbf{HTTP/2-Frame Größe in Bytes} \\
-                \hline
-                6 & Gesendet & 24 \\
-                6 & Gesendet & 45 \\
-                6 & Gesendet & 13 \\
-                7 & Gesendet & 57 \\
-                7 & Gesendet & 13 \\
-                10 & Empfangen & 45 \\
-                12 & Gesendet & 9 \\
-                13 & Empfangen & 9 \\
-                13 & Empfangen & 13 \\
-                14 & Empfangen & 126 \\
-                16 & Empfangen & 1065 \\
-                \hline
-            \end{tabular}
-
-            \vspace{0.2cm}
-
-            \begin{tabular}{|c|c|}
-                \hline
-                \textbf{Gesamt Gesendet} & \textbf{161} \\
-                \textbf{Gesamt Empfangen} & \textbf{1258} \\
-                \textbf{Gesamt} & \textbf{1419} \\
-                \textbf{Frames Gesamt} & \textbf{7} \\
-                \textbf{HTTP/2-Frames Gesamt} & \textbf{10} \\
-                \hline
-            \end{tabular}
-        \end{minipage}
+    \begin{adjustbox}{max width=\textwidth}
+        \begin{tabular}{|c|c|c|}
+            \hline
+            \textbf{Paketnummer} & \textbf{Empfangen oder gesendet} & \textbf{HTTP/2-Frame Größe in Bytes} \\
+            \hline
+            6 & Gesendet & 24 \\
+            6 & Gesendet & 45 \\
+            6 & Gesendet & 13 \\
+            7 & Gesendet & 57 \\
+            7 & Gesendet & 13 \\
+            10 & Empfangen & 45 \\
+            12 & Gesendet & 9 \\
+            13 & Empfangen & 9 \\
+            13 & Empfangen & 13 \\
+            14 & Empfangen & 126 \\
+            16 & Empfangen & 1065 \\
+            \hline\hline
+            \multicolumn{2}{|c|}{\textbf{Gesamt Gesendet}} & \textbf{161} \\
+            \multicolumn{2}{|c|}{\textbf{Gesamt Empfangen}} & \textbf{1258} \\
+            \multicolumn{2}{|c|}{\textbf{Gesamt}} & \textbf{1419} \\
+            \multicolumn{2}{|c|}{\textbf{Frames Gesamt}} & \textbf{7} \\
+            \multicolumn{2}{|c|}{\textbf{HTTP/2-Frames Gesamt}} & \textbf{10} \\
+            \hline
+        \end{tabular}
     \end{adjustbox}
-    \caption{Gesendete und empfangene HTTP/2-Frames mit ihrer Größe in Bytes. Ohne Connection Preface, da dies im Standard \cite{rfc9113_http2_headers} explizit nicht als Frame betrachtet wird}\label{tab:packet_size}
+    \caption{Gesendete und empfangene HTTP/2-Frames mit ihrer Größe in Bytes. Ohne Connection Preface, da dies im Standard~\cite{rfc9113_http2_headers} explizit nicht als Frame betrachtet wird}\label{tab:packet_size}
 \end{table}
 
 \begin{table}
