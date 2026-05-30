@@ -1,0 +1,15 @@
+\subsection{Reflexion und Diskussion}
+
+Die Analyse der HTTP-Kommunikation stellte wenige Herausforderungen dar.
+Die Unterscheidung zwischen Frames auf der Verbindungsschicht und HTTP/2-Frames war zunächst unklar, da mehrere HTTP/2-Frames in einem TCP-Paket übertragen werden können.
+Zudem hat die Klassifikation des Connection Preface Recherche gefordert, da es kein HTTP/2-Frame ist, sondern ein Magic String, der vor den Frames gesendet wird.
+
+HTTP/2 hat im Vergleich zu HTTP/1.1 einen Overhead bei der Initialisierung der Verbindung.
+Nach diesem Overhead werden aber die Vorteile von HTTP/2 deutlich.
+Durch HPACK sind die Header deutlich kleiner, was die Übertragung beschleunigt.
+Außerdem ermöglicht HTTP/2 das Multiplexing von Anfragen, wodurch die Latenz speziell bei vielen parallel laufenden Anfragen deutlich reduziert wird.
+Insgesamt zeigt sich, dass HTTP/2 deutlich schneller ist als HTTP/1.1, insbesondere bei vielen Anfragen oder großen Headern.
+Die Ergebnisse bestätigen die theoretischen Vorteile von HTTP/2 und zeigen, dass die Implementierung von HTTP/2 in modernen Webbrowsern und Servern gerechtfertigt ist, um die Leistung und Benutzererfahrung im Web zu verbessern.
+Moderne Webanwendungen profitieren von HTTP/2, da sie oft viele Ressourcen (Bilder, Skripte, Stylesheets) laden müssen, und HTTP/2 ermöglicht es, diese effizienter zu übertragen.
+Ein Großteil der Seite kann bereits angezeigt werden, während die restlichen Ressourcen noch geladen werden, was die wahrgenommene Ladezeit verbessert.
+Bei diesen Vorteilen fällt die anfängliche Verzögerung durch die Verbindungseinrichtung von HTTP/2 kaum ins Gewicht, zumal der Unterschied sogar im Direktvergleich mit HTTP/1.1 nicht für einen Nutzer spürbar ist.

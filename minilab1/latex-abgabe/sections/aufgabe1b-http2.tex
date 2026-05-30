@@ -1,3 +1,4 @@
+\FloatBarrier{}
 \subsection{Analyse der HTTP/2-Kommunikation}
 
 Über Wireshark können die versendeten Pakete im Detail nachverfolgt werden. Die Kommunikation beginnt dabei mit dem Aufbau einer TCP-Verbindung.
@@ -34,54 +35,45 @@ Die Settings~\ref{tab:http2_settings} enthalten Informationen über die unterst�
     \caption{Initiale Connection Window Sizes}\label{tab:http2_window_sizes}
 \end{table}
 
-\FloatBarrier
+\FloatBarrier{}
 
-Für die ganze HTTP/2-Kommunikation wurden insgesamt 7 Frames auf Verbindungsschicht verschickt, diese 7 Frames enthalten 10 HTTP/2 Frames sowie das Connection Preface, welches gemäß RFC 9113 §3.4~\cite{rfc9113_http2_headers} kein HTTP/2 Frame ist, von welchen 5 HTTP/2 Frames gesendet und 5 empfangen wurden.
+Für die ganze HTTP/2-Kommunikation wurden insgesamt 7 Frames auf der Verbindungsschicht verschickt, diese 7 Frames enthalten 10 HTTP/2-Frames sowie das Connection Preface, welches gemäß RFC 9113 §3.4~\cite{rfc9113_http2_headers} kein HTTP/2-Frame ist, von welchen 5 HTTP/2-Frames gesendet und 5 empfangen wurden.
 Dabei wurden insgesamt 1419 Bytes übertragen, von welchen 161 Bytes gesendet und 1258 Bytes empfangen wurden.~\ref{tab:packet_size}
 
 Bei der beobachtbaren HTTP/2-Kommunikation werden Settings nur über Stream 0 gesendet, während Stream 1 hier für die Get Anfrage genutzt wird.
 Außerdem werden Flags wie End Headers, End Stream, Padded und Priority in den Header Frames verwendet, um die Struktur und Priorität der übertragenen Daten zu steuern.
 Die Nutzlastgrößen variieren je nach Frame-Typ, wobei die Data Frames die größte Nutzlast aufweisen, da sie die eigentlichen Daten der HTTP-Anfrage und -Antwort enthalten.
-Eine weitere interessante Flag ist die ACK-Flag in den Settings Frames. Die ACK-Flag wird genutzt um das erhalten der zuvor gesendeten Settings und deren Anwendung zu bestätigen, dabei enthält dieser HTTP/2 Frame nie eine Nutzlast~\cite{rfc9113_http2_headers}.~\ref{tab:packet_details}
+Eine weitere interessante Flag ist die ACK-Flag in den Settings Frames. Die ACK-Flag wird genutzt um das Erhalten der zuvor gesendeten Settings und deren Anwendung zu bestätigen, dabei enthält dieser HTTP/2-Frame nie eine Nutzlast~\cite{rfc9113_http2_headers}.~\ref{tab:packet_details}
 
 
 \begin{table}
     \centering
-    \begin{adjustbox}{width=\textwidth}
-        \begin{minipage}{\textwidth}
-            \centering
-            \begin{tabular}{|c|c|c|}
-                \hline
-                \textbf{Paketnummer} & \textbf{Empfangen oder gesendet} & \textbf{HTTP/2 Frame Größe in Bytes} \\
-                \hline
-                6 & Gesendet & 24 \\
-                6 & Gesendet & 45 \\
-                6 & Gesendet & 13 \\
-                7 & Gesendet & 57 \\
-                7 & Gesendet & 13 \\
-                10 & Empfangen & 45 \\
-                12 & Gesendet & 9 \\
-                13 & Empfangen & 9 \\
-                13 & Empfangen & 13 \\
-                14 & Empfangen & 126 \\
-                16 & Empfangen & 1065 \\
-                \hline
-            \end{tabular}
-
-            \vspace{0.2cm}
-
-            \begin{tabular}{|c|c|}
-                \hline
-                \textbf{Gesamt Gesendet} & \textbf{161} \\
-                \textbf{Gesamt Empfangen} & \textbf{1258} \\
-                \textbf{Gesamt} & \textbf{1419} \\
-                \textbf{Frames Gesamt} & \textbf{7} \\
-                \textbf{HTTP/2 Frames Gesamt} & \textbf{10} \\
-                \hline
-            \end{tabular}
-        \end{minipage}
+    \begin{adjustbox}{max width=\textwidth}
+        \begin{tabular}{|c|c|c|}
+            \hline
+            \textbf{Paketnummer} & \textbf{Empfangen oder gesendet} & \textbf{HTTP/2-Frame Größe in Bytes} \\
+            \hline
+            6 & Gesendet & 24 \\
+            6 & Gesendet & 45 \\
+            6 & Gesendet & 13 \\
+            7 & Gesendet & 57 \\
+            7 & Gesendet & 13 \\
+            10 & Empfangen & 45 \\
+            12 & Gesendet & 9 \\
+            13 & Empfangen & 9 \\
+            13 & Empfangen & 13 \\
+            14 & Empfangen & 126 \\
+            16 & Empfangen & 1065 \\
+            \hline\hline
+            \multicolumn{2}{|c|}{\textbf{Gesamt Gesendet}} & \textbf{161} \\
+            \multicolumn{2}{|c|}{\textbf{Gesamt Empfangen}} & \textbf{1258} \\
+            \multicolumn{2}{|c|}{\textbf{Gesamt}} & \textbf{1419} \\
+            \multicolumn{2}{|c|}{\textbf{Frames Gesamt}} & \textbf{7} \\
+            \multicolumn{2}{|c|}{\textbf{HTTP/2-Frames Gesamt}} & \textbf{10} \\
+            \hline
+        \end{tabular}
     \end{adjustbox}
-    \caption{Gesendete und empfangene HTTP/2 Frames mit ihrer Größe in Bytes}\label{tab:packet_size}
+    \caption{Gesendete und empfangene HTTP/2-Frames mit ihrer Größe in Bytes. Ohne Connection Preface, da dies im Standard~\cite{rfc9113_http2_headers} explizit nicht als Frame betrachtet wird}\label{tab:packet_size}
 \end{table}
 
 \begin{table}
@@ -91,21 +83,21 @@ Eine weitere interessante Flag ist die ACK-Flag in den Settings Frames. Die ACK-
             \hline
             \textbf{Paketnummer} & \textbf{Pakettyp} & \textbf{Stream-ID} & \textbf{Flags} & \textbf{Nutzlastgrößen (Bytes)} \\
             \hline
-            6 & Connection Preface & -- & - & 0 \\
+            6 & Connection Preface & {--} & {-} & 0 \\
             6 & Settings & 0 & ACK=False & 36 \\
-            6 & Window Update & 0 & - & 4 \\
+            6 & Window Update & 0 & {-} & 4 \\
             7 & Headers & 1 & End Headers=True, End Stream=True, Padded=False, Priority=False & 48 \\
-            7 & Window Update & 1 & - & 4 \\
+            7 & Window Update & 1 & {-} & 4 \\
             10 & Settings & 0 & ACK=False & 24 \\
             12 & Settings & 0 & ACK=True & 0 \\
             13 & Settings & 0 & ACK=True & 0 \\
-            13 & Window Update & 0 & - & 4 \\
+            13 & Window Update & 0 & {-} & 4 \\
             14 & Headers & 1 & Priority=False, End Headers=True, End Stream=False, Padded=False & 117 \\
             16 & Data & 1 & End Stream=True, Padded=False & 1056 \\
             \hline
         \end{tabular}
     \end{adjustbox}
-    \caption{HTTP/2 Paketdetails}\label{tab:packet_details}
+    \caption{HTTP/2-Paketdetails}\label{tab:packet_details}
 \end{table}
 
 \subsubsection*{HPACK}
@@ -121,7 +113,7 @@ Die dynamische Tabelle wird während der Kommunikation aktualisiert, um neue Hea
 Dabei gibt es verschiedene Szenarien.
 Wir betrachten immer ein Key-Value Paar, also ein Header-Feld und dessen Wert.
 Dabei kann entweder der Key in der dynamischen Tabelle vorhanden sein, oder die Kombination aus Key und Value, oder keines von beiden.
-Wenn etwas in der dynamischen Tabelle vorhanden ist, wird ein Index verwendet, so kann auf das entsprechende Key-Value Paar verwiesen werden, was die Größe der übertragenen Header reduziert.~\cite{rfc7541_http2_hpack}
+Wenn etwas in der dynamischen Tabelle vorhanden ist, wird ein Index verwendet, so kann auf das entsprechende Key-Value-Paar verwiesen werden, was die Größe der übertragenen Header reduziert.~\cite{rfc7541_http2_hpack}
 
 Beispielhaft kann Paket 7 betrachtet werden (Die HTTP/2 Header Frame mit der Get Anfrage).
 In diesem Paket wird die Get Anfrage gesendet, dabei ist der Key \textit{:method} mit dem Wert \textit{GET} in der statischen Tabelle vorhanden.

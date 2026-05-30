@@ -1,0 +1,65 @@
+\FloatBarrier{}
+\subsection{Vergleich der HTTP/1.1- und HTTP/2-Austausche}
+
+In diesem Abschnitt werden die beiden HTTP-Austausche miteinander verglichen, um die Unterschiede in der Anzahl der gesendeten Bytes auf der Verbindungsschicht und der gesendeten HTTP-Bytes zu analysieren.
+
+\subsubsection*{Übertragene Bytes und Pakete}
+
+HTTP/2 nutzt im Vergleich zu HTTP/1.1 Header-Komprimierung und teilt Nachrichten in mehrere HTTP-Frames auf.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{Absender} & \textbf{HTTP1} & \textbf{HTTP2} \\
+        \hline
+        Client (Link Layer Frames) & 778 Bytes & 943 Bytes \\
+        Server (Link Layer Frames) & 1742 Bytes & 1954 Bytes \\
+        Client (HTTP) & 168 Bytes & 161 Bytes \\
+        Server (HTTP) & 1304 Bytes & 1258 Bytes \\
+        \hline
+        \textbf{TCP-Pakete Insgesamt} & 12 & 17 \\
+        \hline
+    \end{tabular}
+    \caption{Anzahl der gesendeten Bytes auf der Verbindungsschicht im HTTP/1.1- und HTTP/2-Austausch inklusive TCP-Paketen und nur HTTP betrachtet.}\label{tab:bytes}
+\end{table}
+
+Basierend auf der Tabelle~\ref{tab:bytes} kann festgestellt werden, dass HTTP/2 im Vergleich zu HTTP/1.1 mehr Bytes auf der Verbindungsschicht sendet, sowohl vom Client als auch vom Server.
+Dies liegt daran, dass HTTP/2 zusätzliche Frames auf der Verbindungsschicht verwendet, um die Kommunikation einzuleiten und Einstellungen auszuhandeln.
+Die Anzahl der gesendeten HTTP-Bytes ist jedoch bei HTTP/2 geringer, was auf die Header-Komprimierung zurückzuführen ist.
+Insgesamt zeigt dies, dass HTTP/2 effizienter in der Übertragung von HTTP-Daten ist, obwohl es initial mehr Bytes auf der Verbindungsschicht sendet.
+Dies lässt sich auch bei der Anzahl ausgetauschter TCP-Pakete beobachten.
+HTTP/2 benötigt mehr TCP-Pakete, um die Kommunikation zu etablieren und aufrechtzuerhalten, da Window Updates und Settings ausgetauscht werden.
+Im Gegensatz dazu benötigt HTTP/1.1 weniger TCP-Pakete, da es keine zusätzlichen Frames für die Verbindungsaushandlung verwendet.
+
+\subsubsection*{Verbindungsaufbau Overhead}
+
+Der Overhead beider Protokolle kann durch die Anzahl der gesendeten Bytes auf der Verbindungsschicht im Vergleich zu den gesendeten HTTP-Bytes bewertet werden.
+Bei der HTTP/1.1-Kommunikation wurden 778 Bytes auf der Verbindungsschicht gesendet, während nur 168 Bytes HTTP-Daten übertragen wurden, damit wurden etwa \textbf{21,6 \%} der gesendeten Bytes für die eigentlichen HTTP-Daten verwendet.
+Im Gegensatz dazu wurden bei HTTP/2 943 Bytes auf der Verbindungsschicht gesendet, während nur 161 Bytes HTTP-Daten übertragen wurden, was etwa \textbf{17,1 \%} der gesendeten Bytes für die HTTP-Daten entspricht.
+Bei dem Vergleich muss jedoch beachtet werden, dass HTTP/2 zusätzliche Frames für die Verbindungsaushandlung und Einstellungen verwendet, was zu einem höheren Overhead auf der Verbindungsschicht führt, aber gleichzeitig die Effizienz der HTTP-Datenübertragung verbessert.
+Deshalb nutzt HTTP/2 auf Anwendungsebene nur 57 Bytes für die Get-Anfrage, während HTTP/1.1 168 Bytes für die gleiche Anfrage benötigt.
+Außerdem benötigt HTTP/2 263 Bytes, gesendet vom Client, für den initialen Settings Austausch.
+Dies bedeutet auch, dass HTTP/2 immer effizienter wird je mehr Anfragen über die gleiche Verbindung gesendet werden.
+Der initiale Verbindungsoverhead wird auf mehrere Anfragen verteilt, jede weitere Anfrage ist aber deutlich effizienter als bei HTTP/1.1, da die Header-Komprimierung und die Multiplexing-Fähigkeiten von HTTP/2 genutzt werden können.
+
+\subsubsection*{HTTP/2-Multiplexing}
+Ein weiterer wichtiger Unterschied zwischen HTTP/1.1 und HTTP/2 ist die Fähigkeit von HTTP/2, mehrere Anfragen gleichzeitig über die gleiche Verbindung zu multiplexen.
+HTTP/2 nutzt dafür Streams.
+Dabei läuft eine Anfrage pro Stream.
+Die Daten werden in Frames bestimmter Größe aufgeteilt, die unabhängig voneinander gesendet und empfangen werden können.
+Dabei bleibt die Reihenfolge der Frames innerhalb eines Streams erhalten, aber die Frames verschiedener Streams können in beliebiger Reihenfolge gesendet werden (Multiplexing).
+Das verhindert, dass eine Anfrage die Bearbeitung einer anderen blockiert, da die Frames verschiedener Streams verzahnt voneinander gesendet und empfangen werden können.
+Der Empfänger ordnet die Frames dann entsprechend der Stream-IDs.
+Ein Stream kann also als logische Verbindung innerhalb der TCP-Verbindung betrachtet werden, die es ermöglicht, mehrere Anfragen gleichzeitig zu bearbeiten, ohne dass sie sich gegenseitig blockieren.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{res/http2-multiplexing.png}
+    \caption{Stream 0 wird für die initiale Verbindungsaushandlung verwendet, während Stream 1 für die GET-Anfrage genutzt wird.}\label{fig:multiplexing}
+\end{figure}
+
+In unserem HTTP/2-Austausch~\ref{fig:multiplexing} wurden 7 Link Layer Frames mit HTTP/2-Protokoll gesendet. Dabei wurde erst der Settings-Austausch über Stream 0 initiiert, bevor die GET-Anfrage über Stream 1 gesendet wurde.
+Nachdem dann die Kommunikation über Stream 0 abgeschlossen wurde, wurde die Response der GET-Anfrage über Stream 1 empfangen.
+Multiplexing war hier nicht in größerem Stil notwendig und auch nicht möglich, da der Settings-Austausch zwingend erfolgt sein muss, bevor Antworten gesendet werden.
+Sonst fehlen Kommunikationsparameter für die Streams.

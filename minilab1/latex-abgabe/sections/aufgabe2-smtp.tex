@@ -9,12 +9,13 @@ Anschließend wurden die SMTP Befehle vorbereitet und der Austausch durchgeführ
 \subsection*{Erster Versuch}
 
 Im ersten Versuch wurden alle SMTP Befehle als zusammenhängender Block in Telnet eingefügt.
-Der Server akzeptierte die Anfrage und bestätigte die Zustellung mit \texttt{250 ok: Message 406218478 accepted}~\ref{fig:smtp_attempt1}.
+Der Server akzeptierte die Anfrage und bestätigte die Zustellung mit \texttt{250 ok: Message 406218478 accepted}~\ref{fig:smtp_attempts}.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\textwidth]{res/smtp_attempt1.png}
-    \caption{Erster SMTP-Versuch: Alle Befehle als Block eingefügt.}\label{fig:smtp_attempt1}
+    \includegraphics[width=0.45\textwidth]{res/smtp_attempt1.png}
+    \includegraphics[width=0.45\textwidth]{res/smtp_attempt2.png}
+    \caption{Erster SMTP-Versuch (links): Alle Befehle als Block eingefügt. Zweiter SMTP Versuch (rechts): Korrekte Befehlsfolge}\label{fig:smtp_attempts}
 \end{figure}
 
 \FloatBarrier{}
@@ -22,16 +23,16 @@ Der Server akzeptierte die Anfrage und bestätigte die Zustellung mit \texttt{25
 \subsection*{Zweiter Versuch}
 
 Nach erneuter Recherche anhand von RFC 5321 §4.3 wurde festgestellt, dass der Client nach jedem gesendeten Befehl auf die Antwort des Servers warten muss, bevor der nächste Befehl gesendet wird~\cite{rfc5321_smtp}.
-Im zweiten Versuch wurden die Befehle daher einzeln geschickt.
+Im zweiten Versuch~\ref{fig:smtp_attempts} wurden die Befehle daher einzeln geschickt.
 
 \begin{table}[h]
     \centering
-    \begin{adjustbox}{width=\textwidth}
+    \begin{adjustbox}{max width=\textwidth}
         \begin{tabular}{|c|c|c|}
             \hline
             \textbf{Befehl} & \textbf{Serverantwort} & \textbf{Bedeutung} \\
             \hline
-            (\texttt{telnet udcm-wwu1.uni-muenster.de 25}) & \texttt{220 UDCM-WWU1\ldots{} ESMTP} & Server bereit, ESMTP unterstützt \\
+            (\texttt{telnet udcm-wwu1\ldots{} 25}) & \texttt{220 UDCM-WWU1\ldots{} ESMTP} & Server bereit, ESMTP unterstützt \\
             \hline
             \texttt{EHLO monkey.banana.com} & \texttt{250-} Capability-Liste & Client identifiziert sich, Server listet Erweiterungen \\
             \hline
@@ -41,7 +42,7 @@ Im zweiten Versuch wurden die Befehle daher einzeln geschickt.
             \hline
             \texttt{DATA} & \texttt{354 go ahead} & Server bereit für Nachrichteninhalt \\
             \hline
-            (\textit{Header} + \textit{Body}) + \texttt{.} & \texttt{250 ok: Message 406219343 accepted} & Nachricht zugestellt/akzeptiert \\
+            (\textit{Header} + \textit{Body}) + \texttt{.} & \texttt{250 ok} & Nachricht zugestellt/akzeptiert \\
             \hline
             \texttt{QUIT} & \texttt{221 UDCM-WWU1\ldots{}} & Verbindung korrekt beendet \\
             \hline
@@ -50,18 +51,8 @@ Im zweiten Versuch wurden die Befehle daher einzeln geschickt.
     \caption{SMTP Befehle im zweiten Versuch}\label{tab:smtp_dialog}
 \end{table}
 
-\FloatBarrier{}
-
 Der Server warb in der EHLO-Response mit den Erweiterungen \texttt{8BITMIME}, \texttt{SIZE 26214400} und \texttt{STARTTLS}.
 Der Server antwortete auf \texttt{QUIT} mit \texttt{221} und schloss die Verbindung, was dem korrekten Verbindungsabbau gemäß RFC 5321 §4.1.1.10 entspricht~\cite{rfc5321_smtp}.
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{res/smtp_attempt2.png}
-    \caption{Zweiter SMTP Versuch: Korrekte Befehlsfolge}\label{fig:smtp_attempt2}
-\end{figure}
-
-\FloatBarrier{}
 
 \subsection*{Auswertung}
 

@@ -5,7 +5,7 @@
 Ich habe schonmal eine Pyhton Datei geschrieben, die eine high level library nutzt um die Anfragen zu schicken, die im Assignement notwedig sind.
 
 Um sie zu nutzen empfehle ich ein virtual environment anzulegen und packages zu installieren. Falls ihr nicht wisst wie hier ein kleiner guide.
-Startet ein Terminal in dem Minilab 1 Folder.
+Startet ein Terminal in dem `minilab1` Folder.
 
 ```bash
 # Virtual environment erstellen und Dependencies installieren
