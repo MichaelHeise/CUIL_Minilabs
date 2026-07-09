@@ -84,3 +84,12 @@ pythontex-files-*
 
 # IDEs
 .vscode/
+
+# python
+__pycache__/
+
+# cuil project
+cuil_lab.egg-info/
+
+# Ignoere hidden files and directories
+.*/
