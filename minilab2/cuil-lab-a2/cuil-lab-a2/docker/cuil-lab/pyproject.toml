@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cuil-lab"
+version = "0.1.0"
+description = "Terminal lab dashboard for CUIL Assignment 2"
+requires-python = ">=3.11"
+dependencies = [
+  "textual>=0.60",
+  "pydantic>=2.5",
+  "docker>=7.0",
+  "PyYAML>=6.0",
+  "pyte>=0.8",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-asyncio>=0.23"]
+
+[project.scripts]
+cuil-lab = "cuil_lab.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["cuil_lab*"]
+
+[tool.pytest.ini_options]
+markers = [
+  "docker: tests that require a running Docker daemon",
+  "e2e: tests that exercise the full Textual TUI via pilot",
+]
+asyncio_mode = "auto"

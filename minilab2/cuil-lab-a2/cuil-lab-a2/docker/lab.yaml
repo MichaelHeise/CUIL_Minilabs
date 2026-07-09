@@ -1,0 +1,24 @@
+# CUIL Assignment 2, Default lab topology.
+#
+# Two hosts (n1, n2) connected by one shaped link.
+# All parameters below are starting values; press 'l' in the TUI
+# to change link parameters at runtime, 'c' to change TCP congestion
+# control on a host.
+
+hosts:
+  - name: n1
+    description: "Sender (Node 1)"
+  - name: n2
+    description: "Receiver (Node 2)"
+
+links:
+  - from: n1
+    to: n2
+    bandwidth: 100mbit
+    delay: 0ms
+    jitter: 0ms
+    loss: 0%
+    burst: 32kbit
+
+tcp:
+  congestion_control: reno
