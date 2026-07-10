@@ -82,5 +82,17 @@ pythontex-files-*
 # Venv
 *venv*/
 
+# Python stuff
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
 # IDEs
 .vscode/
+
+# lab2 runtime output
+.cuil-lab/
+out/
