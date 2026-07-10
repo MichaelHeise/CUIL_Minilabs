@@ -89,7 +89,10 @@ pythontex-files-*
 __pycache__/
 
 # cuil project
-cuil_lab.egg-info/
+*.egg-info/
 
 # Ignoere hidden files and directories
 .*/
+
+# Include the output for the pcap
+!*.pcap
