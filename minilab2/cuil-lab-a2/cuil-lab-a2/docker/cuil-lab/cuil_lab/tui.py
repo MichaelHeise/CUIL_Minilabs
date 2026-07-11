@@ -691,7 +691,7 @@ class CuilLabApp(App):
         self.run_worker(work, thread=True, group="capture", exit_on_error=False)
 
     @staticmethod
-    def _capture_cmd(peer: str, out_path: str) -> str:
+    def _capture_cmd(peer: str, out_path: str, log_path: str) -> str:
         """Start tcpdump on the interface that routes toward ``peer``: on a
         star hub every link has its own interface, so eth0 would be wrong."""
         return (
@@ -699,7 +699,7 @@ class CuilLabApp(App):
             f"dev=$(ip -o route get \"$peer_ip\" 2>/dev/null "
             f"| sed -n 's/.*dev \\([^ ]*\\).*/\\1/p'); "
             f"nohup tcpdump -i \"${{dev:-eth0}}\" -U -w {out_path} "
-            f">/dev/null 2>&1 &"
+            f">{log_path} 2>&1 &"
         )
 
     def _start_capture(self, link) -> None:
@@ -708,8 +708,9 @@ class CuilLabApp(App):
             started: list[tuple[str, str]] = []
             for host, peer in ((link.from_, link.to), (link.to, link.from_)):
                 path = f"/out/cap-{ts}-{host}.pcap"
+                log_path = f"/tmp/debug-{host}.log"
                 self.controller.exec_in_node(
-                    host, ["sh", "-c", self._capture_cmd(peer, path)],
+                    host, ["sh", "-c", self._capture_cmd(peer, path, log_path)],
                 )
                 started.append((host, path))
             # The nohup wrapper exits 0 even when tcpdump dies instantly, so
@@ -730,7 +731,8 @@ class CuilLabApp(App):
                         ["sh", "-c", f"pkill -INT -f '^tcpdump.*{path}'; true"],
                     )
                 self._log_from_worker(
-                    f"capture failed to start on {link.from_}/{link.to}"
+                    f"capture failed to start on {link.from_}/{link.to}; "
+                    "/tmp/debug-n1.log and /tmp/debug-n2.log "
                 )
                 return
 
