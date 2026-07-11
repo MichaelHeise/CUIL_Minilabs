@@ -82,17 +82,17 @@ pythontex-files-*
 # Venv
 *venv*/
 
+# Python stuff
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
 # IDEs
 .vscode/
 
-# python
-__pycache__/
-
-# cuil project
-*.egg-info/
-
-# Ignoere hidden files and directories
-.*/
-
-# Include the output for the pcap
-!*.pcap
+# lab2 runtime output
+.cuil-lab/
+out/
