@@ -1,27 +1,45 @@
-@misc{visix,
-  title = {{Visualization and Graphics (VISIX)}},
-  author = {Name Surname},
-  howpublished = {\url{https://www.uni-muenster.de/VISIX/}},
-  note = {Accessed: 2022-05-13}
+@misc{tcp_newreno,
+    series =    {Request for Comments},
+    number =    6582,
+    howpublished =  {RFC 6582},
+    publisher = {RFC Editor},
+    doi =       {10.17487/RFC6582},
+    url =       {https://www.rfc-editor.org/info/rfc6582},
+    author =    {Andrei Gurtov and Tom Henderson and Sally Floyd and Yoshifumi Nishida},
+    title =     {{The NewReno Modification to TCP's Fast Recovery Algorithm}},
+    pagetotal = 16,
+    year =      2012,
+    month =     apr,
+    abstract =  {RFC 5681 documents the following four intertwined TCP congestion control algorithms: slow start, congestion avoidance, fast retransmit, and fast recovery. RFC 5681 explicitly allows certain modifications of these algorithms, including modifications that use the TCP Selective Acknowledgment (SACK) option (RFC 2883), and modifications that respond to "partial acknowledgments" (ACKs that cover new data, but not all the data outstanding when loss was detected) in the absence of SACK. This document describes a specific algorithm for responding to partial acknowledgments, referred to as "NewReno". This response to partial acknowledgments was first proposed by Janey Hoe. This document obsoletes RFC 3782. {[}STANDARDS-TRACK{]}},
 }
 
-@inproceedings {Rave21,
-booktitle = {Vision, Modeling, and Visualization},
-editor = {Andres, Bjoern and Campen, Marcel and Sedlmair, Michael},
-title = {{Axes Bundling and Brushing in Star Coordinates}},
-author = {Rave, Hennes and Molchanov, Vladimir and Linsen, Lars},
-year = {2021},
-publisher = {The Eurographics Association},
-ISBN = {978-3-03868-161-8},
-DOI = {10.2312/vmv.20211365}
+@misc{tcp_cubic,
+    series =    {Request for Comments},
+    number =    9438,
+    howpublished =  {RFC 9438},
+    publisher = {RFC Editor},
+    doi =       {10.17487/RFC9438},
+    url =       {https://www.rfc-editor.org/info/rfc9438},
+    author =    {Lisong Xu and Sangtae Ha and Injong Rhee and Vidhi Goel and Lars Eggert},
+    title =     {{CUBIC for Fast and Long-Distance Networks}},
+    pagetotal = 28,
+    year =      2023,
+    month =     aug,
+    abstract =  {CUBIC is a standard TCP congestion control algorithm that uses a cubic function instead of a linear congestion window increase function to improve scalability and stability over fast and long-distance networks. CUBIC has been adopted as the default TCP congestion control algorithm by the Linux, Windows, and Apple stacks. This document updates the specification of CUBIC to include algorithmic improvements based on these implementations and recent academic work. Based on the extensive deployment experience with CUBIC, this document also moves the specification to the Standards Track and obsoletes RFC 8312. This document also updates RFC 5681, to allow for CUBIC's occasionally more aggressive sending behavior.},
 }
 
-@ARTICLE{Molchanov19,
-  author={Molchanov, Vladimir and Linsen, Lars},
-  journal={IEEE Transactions on Visualization and Computer Graphics},
-  title={{Shape-preserving Star Coordinates}},
-  year={2019},
-  volume={25},
-  number={1},
-  pages={449-458},
-  doi={10.1109/TVCG.2018.2865118}}
+@misc{iperf3,
+  author       = {{Energy Sciences Network (ESnet)}},
+  title        = {iperf3 Documentation},
+  year         = {2026},
+  url          = {https://software.es.net/iperf/},
+  note         = {Accessed: 2026-07-11}
+}
+
+@misc{wireshark,
+  author       = {{Wireshark Foundation}},
+  title        = {Wireshark},
+  year         = {2026},
+  url          = {https://www.wireshark.org/},
+  note         = {Accessed: 2026-07-11}
+}

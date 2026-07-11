@@ -1,0 +1,10 @@
+\section{Methodik}
+
+Für die Experimente wurde das im Aufbau \ref{sec:aufbau} beschriebene virtuelle Netzwerk genutzt.
+Dabei wurde für jedes Experiment eine Datei erzeugt, die den Datenverkehr im Netzwerk aufzeichnet.
+iperf3 \ref{sec:iperf3_docker_tool} erzeugt JASON und TXT-Dateien, die direkt die Ergebnisse der Messung enthalten.
+Teilweise werden auch Shell Befehle \ref{sec:shell_docker_tool} genutzt, um die Experimente zu starten und zu stoppen oder um Ausgaben der Experimente zu erhalten.
+PCAP Dateien werden von dem \ref{sec:pcap_docker_capture} beschriebenen Capture Tool erzeugt und können anschließend mit Wireshark \cite{wireshark} analysiert werden hinsichtlich bestimmter Fragestellungen untersucht werden.
+Wireshark ist ein Tool, um Netzwerkverkehr zu analysieren und kann PCAP Dateien öffnen und die enthaltenen Pakete darstellen.
+Einzelne Pakete können byteweise analysiert werden.
+Wireshark erlaubt einzelne Parameter und Flags der Verbindungen zu analysieren und die Pakete nach bestimmten Kriterien zu filtern.
