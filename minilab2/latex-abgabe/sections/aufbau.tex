@@ -57,12 +57,31 @@ Das UDP Tool in der Docker Umgebung kann genutzt werden, um UDP Verbindungen zwi
 Dabei müssen Server und Client angegeben werden, sowie die Anzahl der Pakete, das Intervall und die Paketgröße.
 Beim Ausführen sendet der Client UDP Pakete an den Server. Für den ganzen Vorgang wird eine Log-Datei pro Endpunkt erstellt, die die Anzahl der gesendeten und empfangenen Pakete enthält.
 
+Die Standardeinstellungen für das UDP Tool sind:
+\begin{itemize}[noitemsep]
+    \item Server: n2
+    \item Client: n1
+    \item Count: 10
+    \item Interval: 0.1 s
+    \item size: 64 B
+\end{itemize}
+
 \subsubsection*{tcp}
 \label{sec:tcp_docker_tool}
 
 Das TCP Tool in der Docker Umgebung kann genutzt werden, um TCP Verbindungen zwischen den Hosts aufzubauen.
 Dabei müssen Server und Client angegeben werden, sowie die Anzahl der Pakete, das Intervall und die Paketgröße.
 Zusätzlich zu diesen Einstellungen, die wir auch für UDP nutzen, kann eingestellt werden, ob eine persistente Verbindung genutzt werden soll, oder ob für jedes Paket eine neue Verbindung aufgebaut werden soll.
+
+Die Standardeinstellungen für das TCP Tool sind:
+\begin{itemize}[noitemsep]
+    \item Server: n2
+    \item Client: n1
+    \item Count: 10
+    \item Interval: 0.1 s
+    \item size: 64 B
+    \item Mode: persistent
+\end{itemize}
 
 \subsubsection*{PCAP Capture}
 \label{sec:pcap_docker_capture}
