@@ -2,6 +2,8 @@
 set -eux
 
 mkdir -p analysis
+rm -f analysis/reno-* analysis/cubic-*
+
 docker run --rm \
   -v "$PWD:/data:ro" \
   -v "$PWD/analysis:/analysis" \
