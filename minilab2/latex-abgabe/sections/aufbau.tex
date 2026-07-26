@@ -13,7 +13,7 @@ Zudem können einige Parameter für den Link zwischen den Hosts eingestellt werd
     \label{fig:docker_network}
 \end{figure}
 
-\subsubsection*{Link Einstellungen}
+\subsubsection{Link Einstellungen}
 \label{sec:link_einstellungen}
 
 Der Link zwischen den Hosts kann in der Bandbreite, Latenz, Verzögerung und Paketverlust konfiguriert werden.
@@ -27,7 +27,7 @@ Standardmäßig ist der Link mit folgenden Parametern konfiguriert:
     \item Burst: 32kbit
 \end{itemize}
 
-\subsubsection*{TCP Staukontrolle}
+\subsubsection{TCP Staukontrolle}
 \label{sec:tcp_staukontrolle_einstellungen}
 
 Für jeden Host kann ein Standard für die Staukontrolle gewählt werden.
@@ -41,7 +41,7 @@ Standardmäßig ist die Staukontrolle auf TCP Reno eingestellt.
     \item TCP CUBIC: \cite{tcp_cubic}
 \end{itemize}
 
-\subsubsection*{iperf3}
+\subsubsection{iperf3}
 \label{sec:iperf3_docker_tool}
 
 iperf3 ist ein Tool, um Netzwerkleistung in IP Netzwerken zu messen.
@@ -50,7 +50,7 @@ In der Docker Umgebung muss ein Host als Server und ein Host als Client angegebe
 Eine Messung erzeugt eine JSON und eine Log-Datei, die die Ergebnisse der Messung enthalten.
 In der Log-Datei ist zu sehen, dass für jedes Intervall gemessen wird wie viele Daten übertragen wurden, daraus ergibt sich der gemessene Durchsatz und die Übertragungsrate für den Link.
 
-\subsubsection*{udp}
+\subsubsection{udp}
 \label{sec:udp_docker_tool}
 
 Das UDP Tool in der Docker Umgebung kann genutzt werden, um UDP Verbindungen zwischen den Hosts aufzubauen.
@@ -66,7 +66,7 @@ Die Standardeinstellungen für das UDP Tool sind:
     \item size: 64 B
 \end{itemize}
 
-\subsubsection*{tcp}
+\subsubsection{tcp}
 \label{sec:tcp_docker_tool}
 
 Das TCP Tool in der Docker Umgebung kann genutzt werden, um TCP Verbindungen zwischen den Hosts aufzubauen.
@@ -83,14 +83,14 @@ Die Standardeinstellungen für das TCP Tool sind:
     \item Mode: persistent
 \end{itemize}
 
-\subsubsection*{PCAP Capture}
+\subsubsection{PCAP Capture}
 \label{sec:pcap_docker_capture}
 
 In der Docker Umgebung ist es möglich, die übertragenen Pakete in eine PCAP Datei zu speichern.
 Dazu kann ein Capture mit p gestartet werden.
 Anschließend wird pro Host eine PCAP Datei erstellt, die alle Pakete enthält, die über den Link übertragen wurden bis das Capture wieder gestoppt wird.
 
-\subsubsection*{Shell} \label{sec:shell_docker_tool}
+\subsubsection{Shell} \label{sec:shell_docker_tool}
 
 In der Docker Umgebung ist es möglich, eine Shell auf den Hosts zu öffnen.
 Mit der Shell können Hosts konfiguriert und Befehle ausgeführt werden, die nicht über die Docker Umgebung möglich sind.
