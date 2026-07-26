@@ -40,7 +40,7 @@ Die Log- und PCAP-Dateien treffen dieselben Aussagen über den UDP Datenverkehr 
 Da die Log-Dateien weniger unnötige Informationen enthalten, werden diese für die Auswertung genutzt. Die PCAP-Dateien enthalten neben den UDP Paketen auch ARP Anfragen und Antworten, die für die Auswertung nicht relevant sind.
 Bei dem Link ohne Paketverlust wurden alle 30 Pakete erfolgreich mit nahezu keiner Verzögerung übertragen.
 Bei dem Link mit Paketverlust kamen nur 22 der 30 Pakete beim Server an.
-Die verlorenen Pakete entsprechen wie erwartet dem eingestellten Paketverlust von 30 \%.
+Das ist näherungsweise konsistent mit dem eingestellten Paketverlust von 30 \% (8 von 30 Paketen, also ca. 27 \%).
 Die verlorenen Pakete wurden erkannt, da sie vom Client gesendet wurden, aber nicht in der Log-Datei des Servers auftauchten.
 
 \begin{table}[h]
