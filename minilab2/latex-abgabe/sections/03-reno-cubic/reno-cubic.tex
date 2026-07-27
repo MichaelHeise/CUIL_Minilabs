@@ -151,7 +151,7 @@ TCP Reno zeigt insgesamt 81 Retransmissionen, TCP CUBIC 71.
 Die Retransmissionsrate steigt bei beiden Algorithmen annähernd gleichmäßig an, was mit der Paketverlustrate von 3\,\% konsistent ist.
 
 Der Zusammenhang zwischen Paketverlusten und Staukontrollfenster ist wie bereits beschrieben in Abbildung~\ref{fig:cwnd_losses_reno} und Abbildung~\ref{fig:cwnd_losses_cubic} sichtbar.
-"Hier gleich den näheren mathematischen vergleich von differentielle Verlaufsanalyse oder, näher an der Statistik, regressionsbasierte Modellselektion. UND ereignisbasierte Latenzanalyse oder formaler Punktprozessanalyse der Paketverluste mit Regime änderung"
+Eine regressionsbasierte Analyse des Wachstumsverhaltens erfolgt in Abschnitt~\ref{sec:reno-cubic-diskussion}.
 \FloatBarrier{}
 \subsubsection{Zusammenfassender Vergleich}
 
@@ -181,9 +181,47 @@ Tabelle~\ref{tab:reno_cubic_summary} fasst die wichtigsten Kennwerte beider Algo
 
 \subsubsection{Wachstum und Reaktion}
 
+Abbildung~\ref{fig:phase_fitting} zeigt die cwnd Verläufe beider Algorithmen mit Regressionskurven.
+Dabei wird für jede Congestion Avoidance Regim (Wachstumsphase zwischen zwei Verlustereignissen) ein Polynom des passenden Grades gefittet: linear (Grad~1) für Reno, kubisch (Grad~3) für CUBIC.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{res/03-reno-cubic/analysis/temp-phase-fitting.pdf}
+    \caption{Regressionsbasierte Analyse: Congestion Avoidance Fits}\label{fig:phase_fitting}
+\end{figure}
+
+Für TCP Reno bestätigt der lineare Fit den AIMD Mechanismus mit einem mittleren $\bar{R}^2 = 0{,}959$ über 22 Regime.
+Ein exponentieller Fit für die Slow-Start Phase ist für Reno nicht darstellbar, da der erste Paketverlust bereits zu Beginn auftritt ($<$ 3 RTT).
+
+Für TCP CUBIC ergibt der kubische Fit $\bar{R}^2 = 0{,}956$ über 16 Regime.
+Das Wachstum folgt der kubischen Funktion $W(t) = C \cdot (t - K)^3 + W_{\max}$ (vgl. CUBIC-RFC~\cite{tcp_cubic}).
+Die Slow-Start Phase umfasst lediglich vier RTTs ($R^2 = 0{,}845$, Verdopplungszeit $T_2 \approx 240$\,ms) und wird durch den ersten Verlust abgebrochen.
+
+Die Reaktion auf Verluste unterscheidet sich im Reduktionsfaktor: Reno halbiert das cwnd ($\beta = 0{,}5$), CUBIC reduziert auf 70\,\% ($\beta = 0{,}7$).
+Dies wird durch die gemessenen Daten ebenso widergespiegelt.
+
 \subsubsection{Performance, Robustheit und Stabilität}
 
+Im Durchsatz sind beide Algorithmen nahezu gleichwertig (Reno: 968\,kbit/s, CUBIC: 956\,kbit/s).
+Dies ist auf das niedrige Bandbreiten-Verzögerungs-Produkt (BDP $\approx 1\,\text{Mbit/s} \times 80\,\text{ms} \approx 10$\,kB) zurückzuführen: beide Algorithmen füllen die verfügbare Kapazität, bevor CUBICs aggressiveres Wachstum zum Tragen kommen kann.
+
+TCP CUBIC zeigt eine leicht niedrigere Verlustrate (2,9\,\% vs.\ 3,4\,\%) und weniger Retransmissionen (71 vs.\ 81).
+Der höhere Reduktionsfaktor ($\beta = 0{,}7$) bewirkt, dass CUBIC nach einem Verlust von einem höheren cwnd aus weiterwächst.
+Der mittlere Outstanding Wert ist dennoch nahezu identisch (Reno: 12.232\,Bytes, CUBIC: 11.980\,Bytes laut \texttt{avg owin} in \texttt{\{reno,cubic\}-summary.txt}).
+
+Hinsichtlich der Latenz ist CUBIC stabiler. Die maximale RTT beträgt 340\,ms gegenüber 437\,ms bei Reno.
+Dass der mittlere Outstanding Wert bei CUBIC unter dem von Reno liegt, widerspricht der Erwartung eines höheren cwnd-Durchschnitts durch $\beta = 0{,}7$, sofern Outstanding~$\approx$~cwnd angenommen wird.
+Die niedrigere maximale RTT bei CUBIC fällt hingegen erwartbar aus: Das Wachstum nahe $W_{\max}$ könnte weniger Warteschlangenlatenz erzeugen.
+Eine mögliche Erklärung für beide Beobachtungen ist, dass die Outstanding-Metrik das tatsächliche cwnd nur ungenau approximiert.
+Widersprüchlich ist diese Metrik auch an anderer Stelle: Unter der Annahme Outstanding~$\approx$~cwnd sollten \texttt{max owin} und \texttt{max snd\_cwnd} ähnlich ausfallen, doch \texttt{max owin} liegt bei 70.953\,Bytes (Reno) bzw.\ 69.505\,Bytes (CUBIC) (vgl.\ Abschnitt~\ref{sec:reno-cubic-ergebnisse}).
+
 \subsubsection{Praktischer Einsatz}
+
+Die geringe Differenzierung der Algorithmen ist eine direkte Folge des niedrigen BDPs beziehungsweise der begrenzten zeitlichen Beobachtung.
+In Netzwerken mit hoher Bandbreite und langer Verzögerung (z.\,B.\ transatlantische Verbindungen) wächst cwnd bei CUBIC deutlich schneller als bei Reno und ist daher geeigneter (vgl. CUBIC-RFC~\cite{tcp_cubic}).
+
+TCP CUBIC ist in Linux der Standard.
+Die Messergebnisse bestätigen, dass CUBIC unter den gegebenen Bedingungen mindestens gleichwertig zu Reno agiert und bei Latenz und Verlustrate leichte Vorteile zeigt.
 
 \subsubsection{Grenzen des Labs}
 
@@ -195,4 +233,7 @@ Das Experiment unterliegt einigen Einschränkungen, die bei der Interpretation b
         \item Die kurze Messdauer von 30\,Sekunden begrenzt die Aussagekraft.
         \item Die Linux-Implementierungen können vom RFC abweichen.
         \item Das Einstellen der Algorithmen könnte im Experiment unvollständig gewesen sein.
+        \item Das tatsächliche Congestion Window ist nicht direkt beobachtbar ohne Zugriff auf den Kernel.
+        Die Analyse basiert auf der Outstanding Data (unbestätigte Daten) aus \texttt{tcptrace}, die das cwnd lediglich approximiert.
+        Bei Verlusten oder verzögerten ACKs kann die Outstanding Data vom realen cwnd abweichen.
 \end{itemize}
