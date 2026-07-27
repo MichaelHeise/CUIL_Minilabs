@@ -1,0 +1,19 @@
+# CUIL Assignment 2, Task 3: TCP Reno vs. TCP CUBIC.
+
+hosts:
+  - name: n1
+    description: 'Sender (Node 1)'
+  - name: n2
+    description: 'Receiver (Node 2)'
+
+links:
+  - from: n1
+    to: n2
+    bandwidth: 1mbit
+    delay: 20ms
+    jitter: 0ms
+    loss: 3%
+    burst: 32kbit
+
+tcp:
+  congestion_control: cubic
