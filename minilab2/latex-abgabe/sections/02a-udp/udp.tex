@@ -1,16 +1,112 @@
 \section{UDP}
 % Kurz und kanpp wechle Schicht was ist das.
+Das UDP (User Datagram Protocol) ist ein verbindungsloses Protokoll der Transportschicht.
+In diesem Versuch soll der verlustfreie und verlustbehaftete UDP Datenverkehr zwischen zwei Hosts untersucht werden.
 
-\subsection{Parameter und Durchführung}
-% Wie wurde die Umgebung konfiguriert -> Maybe yml falls sinnvoll?
-% Welche Schritte wurden durchgeführt
+\subsection{Durchführung}
+Für die Durchführung wurde das Docker Netzwerk \ref{sec:aufbau} benutzt.
+Es wurde zweimal der UDP Datenverkehr zwischen zwei Hosts untersucht.
+Die Docker Umgebung wurde bei der Standardkonfiguration belassen. Einzig die Link-Parameter \ref{sec:link_einstellungen} wurden beim zweiten Durchlauf angepasst, um den Paketverlust zu simulieren:
 
-\subsection{Ergänzende Methodik}
-% Auf welche Eigenschaften wurde besonders geachtet? (z.B. Paketverluste, RTT, Bandbreite, etc.)
-% Wie wurden diese Verglichen? (z.B. mit Wireshark, iperf3, etc.)
+\begin{itemize}[noitemsep]
+    \item Bandwidth: 100 Mbit/s
+    \item Delay: 0 ms
+    \item Jitter: 0 ms
+    \item Paketverlust: 30 \%
+    \item Burst: 32kbit
+\end{itemize}
+
+In beiden Fällen wurden folgende Schritte durchgeführt:
+\begin{enumerate}
+    \item Starten der Docker Umgebung
+    \item Einstellen der Link Eigenschaften \ref{sec:link_einstellungen}
+    \item Starten des Netzwerkverkehr-Mitschnitts \ref{sec:pcap_docker_capture}
+    \item Starten der UDP Verbindung zwischen den Hosts n1 (UDP Client) und n2 (UDP Server) \ref{sec:udp_docker_tool}
+    \begin{itemize}[noitemsep]
+        \item Server: n2
+        \item Client: n1
+        \item Count: 30
+        \item Interval: 1 s
+        \item size: 64 B
+    \end{itemize}
+    \item Beenden des Netzwerkverkehr-Mitschnitts \ref{sec:pcap_docker_capture}
+    \item Schließen der Docker Umgebung
+\end{enumerate}
+
+Nachdem die Log- und PCAP-Dateien erstellt wurden, wurden diese ausgewertet und die Ergebnisse dokumentiert.
 
 \subsection{Ergebnisse}
-% Selbsterklärende Tabellen, Diagramme, etc. (ggf. mit Referenz auf die verwendeten Tools)
+Die Log- und PCAP-Dateien treffen dieselben Aussagen über den UDP Datenverkehr zwischen den Hosts.
+Da die Log-Dateien weniger unnötige Informationen enthalten, werden diese für die Auswertung genutzt. Die PCAP-Dateien enthalten neben den UDP Paketen auch ARP Anfragen und Antworten, die für die Auswertung nicht relevant sind.
+Bei dem Link ohne Paketverlust wurden alle 30 Pakete erfolgreich mit nahezu keiner Verzögerung übertragen.
+Bei dem Link mit Paketverlust kamen nur 22 der 30 Pakete beim Server an.
+Das ist näherungsweise konsistent mit dem eingestellten Paketverlust von 30 \% (8 von 30 Paketen, also ca. 27 \%).
+Die verlorenen Pakete wurden erkannt, da sie vom Client gesendet wurden, aber nicht in der Log-Datei des Servers auftauchten.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{c|c|c}
+\hline
+\textbf{Paket Nummer} & \textbf{Gesendet durch Client} & \textbf{Empfangen durch Server} \\
+\hline
+1 & J & J \\
+2 & J & J \\
+3 & J & N \\
+4 & J & J  \\
+5 & J & J \\
+6 & J & J \\
+7 & J & J \\
+8 & J & J \\
+9 & J & N \\
+10 & J & J \\
+11 & J & J \\
+12 & J & N \\
+13 & J & N \\
+14 & J & N \\
+15 & J & N \\
+16 & J & J \\
+17 & J & J \\
+18 & J & J \\
+19 & J & N \\
+20 & J & J \\
+21 & J & N \\
+22 & J & J \\
+23 & J & J \\
+24 & J & J \\
+25 & J & J \\
+26 & J & J \\
+27 & J & J \\
+28 & J & J \\
+29 & J & J \\
+30 & J & J \\
+\hline
+\end{tabular}
+\caption{Übertragungsstatus der Pakete zwischen Server und Client mit 30 \% Paketverlust}
+\label{tab:package_transmission}
+\end{table}
+
+Den Logs lässt sich außerdem entnehmen, dass in jedem Fall genau 30 Pakete vom Client gesendet wurden.
+Die verlorenen Pakete wurden nicht erneut gesendet, da UDP ein verbindungsloses Protokoll ist und keine Mechanismen zur Fehlerbehandlung implementiert sind.
 
 \subsection{Diskussion}
-% Welche Erkenntnisse konnten gewonnen werden mit bezug auf die Fragestellung?
+Als Protokoll der Transportschicht wird der UDP Payload an die Anwendungsschicht weitergeleitet.
+Geht ein Paket verloren, so wird die Anwendungsschicht nicht darüber informiert.
+Die Anwendungsschicht kann also durch verlustbehafteten UDP Datenverkehr beeinflusst werden und muss gegebenenfalls selbst Mechanismen implementieren, um mit Paketverlusten umzugehen.
+
+\subsubsection*{Auswirkung auf Anwendungsschicht}
+
+Die Anwendungsschicht erhält durch das UDP Protokoll lückenhafte Daten.
+Auswirkungen können unkritisch sein. Bei Video Streaming oder Voice over IP (VoIP) würde die Stimme oder das Bild kurzzeitig ausfallen oder verzerrt werden, aber die Anwendung würde weiterlaufen.
+Online Spiele, die auf UDP basieren, würden ebenfalls kurzzeitig einfrieren oder verzerrt dargestellt werden, aber die Anwendung würde weiterlaufen. Außerdem wäre ein erneutes Senden nutzlos, da die verlorenen Pakete nicht mehr relevant sind.
+Webseiten oder Dateiübertragungen, die über UDP mit Verlust geladen werden, wären unvollständig, und funktional eingeschränkt.
+Die Anwendung würde nicht mehr korrekt funktionieren, da die verlorenen Pakete erneut gesendet werden müssten, um die Funktionalität der Anwendung zu gewährleisten.
+Die Anwendungsschichtprotokolle können unterschiedlich auf Paketverlust reagieren.
+
+\subsubsection*{Umgang mit Paketverlust}
+
+Bei Anwendungen bei denen alte Pakete nicht mehr verwendet werden können, oder ein Qualitätsverlust in Kauf werden kann, wird der Paketverlust toleriert.
+
+Bei Anwendungen bei denen die verlorenen Pakete erneut gesendet werden müssen, um die Funktionalität der Anwendung zu gewährleisten, muss der Paketverlust erkannt und die verlorenen Pakete erneut gesendet werden.
+Einige Protokolle wie Quick UDP Internet Connections (QUIC) implementieren Flusskontrolle, Staukontrolle, Datenintegrität, aber ebenfalls Retransmission von verlorenen Paketen auf der Anwendungsschicht.
+Es werden ähnliche Mechanismen wie bei TCP implementiert, um die verlorenen Pakete erneut zu senden.
+Eine Kombination von Sequenznummern und Bestätigungen, sowie Timeouts, werden genutzt, um verlorene Pakete zu erkennen und erneut zu senden.
