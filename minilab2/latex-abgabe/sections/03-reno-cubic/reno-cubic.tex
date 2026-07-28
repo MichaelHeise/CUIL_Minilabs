@@ -67,7 +67,7 @@ Aus der durch tcptrace erzeugten Datei werden die Daten der Kategorie \texttt{re
 \subsubsection{Retransmissionen und Paketverluste}
 
 Retransmissionen werden mit \texttt{tshark} aus den Sender PCAPs extrahiert.
-Dabei wird durch \texttt{tcp.analysis.retransmission} alle Pakete gefiltert, die von TCP als Retransmission erkannt werden.
+Dabei wird durch \texttt{tcp.\allowbreak{}analysis.\allowbreak{}retransmission} alle Pakete gefiltert, die von TCP als Retransmission erkannt werden.
 Für jedes dieser Pakete wird der relative Zeitstempel gespeichert.
 
 Zur Bestimmung der Paketverluste werden Sender und Empfänger PCAPs verglichen.
@@ -77,7 +77,7 @@ Anschließend wird in Python die Mengendifferenz berechnet: $\text{Lost} = \{ x 
 \subsubsection{Auswertungsskripte}
 
 Die gesamte Analyse ist über den Orchestrator \texttt{analyze.sh} idempotent ausführbar.
-Dieses ruft nacheinander \texttt{tcptrace-util.sh} (in einem \texttt{debian:bookworm-slim} Docker Container), \texttt{tshark-util.sh} und \texttt{analyze.py} (via \texttt{uv run}) auf.
+Dieses ruft nacheinander \texttt{tcptrace-\allowbreak{}util.sh} (in einem \texttt{debian:\allowbreak{}bookworm-\allowbreak{}slim} Docker Container), \texttt{tshark-\allowbreak{}util.sh} und \texttt{analyze.py} (via \texttt{uv run}) auf.
 Das Python Skript nutzt \texttt{parsers.py} für das Parsing der Dateien sowie \texttt{plots.py} für die Erzeugung der Diagramme mit \texttt{matplotlib}.
 Voraussetzungen für die Ausführung sind \texttt{docker}, \texttt{tshark} und \texttt{uv}.
 
@@ -94,7 +94,7 @@ Abbildung~\ref{fig:throughput_comparison} zeigt den Durchsatzverlauf beider Algo
     \caption{Durchsatzverlauf von TCP Reno und TCP CUBIC}\label{fig:throughput_comparison}
 \end{figure}
 
-Der mittlere Durchsatz wird von iperf3 als \texttt{bits\_per\_second} unter \texttt{end.sum\_sent} in \texttt{iperf3\_\{reno,cubic\}.json} dargestellt.
+Der mittlere Durchsatz wird von iperf3 als \texttt{bits\_\allowbreak{}per\_\allowbreak{}second} unter \texttt{end.\allowbreak{}sum\_\allowbreak{}sent} in \texttt{iperf3\_\allowbreak{}\{reno,\allowbreak{}cubic\}.\allowbreak{}json} dargestellt.
 TCP Reno misst ca.\ 968\,kbit/s, TCP CUBIC ca.\ 956\,kbit/s.
 Die Werte liegen damit nahe an der Konfiguration von 1\,Mbit/s Durchsatz.
 Beide Algorithmen zeigen Schwankungen, welche auf die konfigurierte Paketverlustrate von 3\,\% zurückzuführen sind.
@@ -155,7 +155,7 @@ Eine regressionsbasierte Analyse des Wachstumsverhaltens erfolgt in Abschnitt~\r
 \FloatBarrier{}
 \subsubsection{Zusammenfassender Vergleich}
 
-Tabelle~\ref{tab:reno_cubic_summary} fasst die wichtigsten Kennwerte beider Algorithmen zusammen (Entnommen aus \texttt{iperf3\_\{reno,cubic\}.json}, \texttt{\{reno,cubic\}-summary.txt} und \texttt{parse\_packet\_losses()} in \texttt{parsers.py}).
+Tabelle~\ref{tab:reno_cubic_summary} fasst die wichtigsten Kennwerte beider Algorithmen zusammen (Entnommen aus \texttt{iperf3\_\allowbreak{}\{reno,\allowbreak{}cubic\}.\allowbreak{}json}, \texttt{\{reno,\allowbreak{}cubic\}-\allowbreak{}summary.\allowbreak{}txt} und \texttt{parse\_\allowbreak{}packet\_\allowbreak{}losses()} in \texttt{parsers.py}).
 
 \begin{table}[h]
     \centering
