@@ -136,11 +136,13 @@ def detect_regimes(t_resamp, y_resamp, min_pts):
     trenches, _ = find_peaks(-np.log(y_resamp), prominence=0.22, distance=min_pts)
     starts = trenches
     ends = list(trenches[1:]) + [len(y_resamp)]
-    return [
-        (t_resamp[a:b], y_resamp[a:b])
-        for a, b in list(zip(starts, ends))
-        if b - a >= min_pts
-    ]
+    regimes = []
+    # filter to keep only growth going over every regime defined by (x1, x2)
+    for x1, x2 in zip(starts, ends):
+        peak = x1 + np.argmax(y_resamp[x1:x2])
+        if peak - x1 >= min_pts:
+            regimes.append((t_resamp[x1:peak], y_resamp[x1:peak]))
+    return regimes
 
 
 def fit_ca(ax, t_resamp, y_resamp, ca_key):
