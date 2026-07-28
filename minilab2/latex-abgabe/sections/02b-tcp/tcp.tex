@@ -1,4 +1,9 @@
+\FloatBarrier
 \section{TCP}
+TCP ist ein verbindungsorientiertes Protokoll der Transportschicht.
+Es soll die physikalische verlustbehaftete Verbindung zwischen zwei Endpunkten zuverlässig machen.
+Dazu müssen verlorene Pakete erneut übertragen werden.
+Diese sogenannten Retransmissions werden in diesem Experiment genauer untersucht.
 
 \subsection{Parameter und Durchführung}
 
@@ -6,4 +11,63 @@
 
 \subsection{Ergebnisse}
 
-\subsection{Diskussion}
+\subsubsection{Retransmissions}
+Unter normalen Bedingungen treten keine TCP-Retransmissions auf, da die Übertragung ohne Paketverluste abläuft und jedes Segment vom Empfänger bestätigt wird. 
+
+\begin{figure}
+    \includegraphics[width=0.49\textwidth]{res/02b-tcp/tcp_client_default_no_retransmission.png}
+    \hfill
+    \includegraphics[width=0.49\textwidth]{res/02b-tcp/tcp_server_default_no_retransmissions.png}
+    \caption{Hier wird deutlich, dass es keine doppelten Übertragungen von TCP Segmenten gab.}
+    \label{fig:no_retransmisions}
+\end{figure}
+
+Wird hingegen eine Paketverlustrate von 30 \% eingestellt, steigt die Anzahl der Retransmissions deutlich an (85 Retransmissions, 22,2 \% beim Client, 57 Retransmissions, 16,3 \% beim Server). \ref{fig:retranssmissions_over_time_graph}
+TCP erkennt fehlende Bestätigungen durch ausbleibende ACKs bzw. durch Zeitüberschreitungen und überträgt die betroffenen Segmente erneut.
+Dadurch erhöht sich die Übertragungsdauer und die Stabilität der Verbindung nimmt ab, während TCP weiterhin versucht, die zuverlässige Übertragung der Daten sicherzustellen.
+Die Anzahl der Retransmissions unterscheidet sich zwischen Client und Server, obwohl beide über denselben verlustbehafteten Link kommunizieren.
+Dies liegt daran, dass TCP die beiden Übertragungsrichtungen unabhängig behandelt und Paketverluste zufällig auftreten.
+Zusätzlich unterscheiden sich die übertragenen Datenmengen und die Anzahl der Bestätigungen in beiden Richtungen, wodurch die Retransmissionsrate variieren kann.
+
+\begin{figure}
+    \includegraphics[width=\textwidth]{res/02b-tcp/tcp_client_loss_retransmission_graph.png}
+    \includegraphics[width=\textwidth]{res/02b-tcp/tcp_server_loss_retransmission_graph.png}
+    \caption{Verlauf der Retransmissions in Abhängigkeit von der Zeit.}
+    \label{fig:retranssmissions_over_time_graph}
+\end{figure}
+
+\subsubsection{Persistente und Reconnect Verbindung}
+Der Reconnect-Modus zeigte unter Verlustbedingungen eine höhere Anzahl an Retransmissions als der persistente Modus.
+Ursache ist der höhere Protokolloverhead durch den wiederholten TCP-Verbindungsaufbau und -abbau.
+Jede zusätzliche Kontrollnachricht stellt eine weitere Möglichkeit für Paketverlust dar.
+Beim persistenten Modus wird dagegen eine bestehende Verbindung wiederverwendet, wodurch weniger TCP-Segmente übertragen werden müssen und die Verbindung von bereits aufgebauten TCP-Zuständen profitiert. 
+Hierbei war außerdem zu erkennen, dass der persistente Modus eine wesentlich kürzere Zeit überhaupt sendet, da er weniger Informationen hin und her schicken muss und dadurch einfach Zeit spart.
+
+\subsubsection{Flusskontrolle ohne Verlust}
+Unter normalen Bedingungen ohne Paketverlust blieb das Empfangsfenster (rwin) während der gesamten Übertragung quasi konstant. \ref{fig:rwin_no_loss}
+
+\begin{figure}
+    \includegraphics[width=0.49\textwidth]{res/02b-tcp/tcp_client_default_rwin.png}
+    \hfill
+    \includegraphics[width=0.49\textwidth]{res/02b-tcp/tcp_server_default_rwin.png}
+    \caption{Hier wird deutlich, dass das Empfangsfenster (rwin) während der gesamten Übertragung quasi konstant blieb.}
+    \label{fig:rwin_no_loss}
+\end{figure}
+
+Dies liegt daran, dass der Empfänger die ankommenden TCP-Segmente kontinuierlich verarbeitet und genügend Pufferkapazität zur Verfügung steht.
+Da keine Segmente verloren gehen und keine erneuten Übertragungen notwendig sind, wird der Datenfluss nicht gestört.
+Das Empfangsfenster muss daher nicht angepasst werden und die TCP-Flusskontrolle begrenzt die Übertragung nicht. 
+
+\subsubsection{Flusskontrolle mit Verlust}
+Die Analyse des Empfangsfensters bei eingestellten 30 \% Verlust zeigt, dass sich die rwin-Werte auch bei einer Paketverlustrate von 30 \% kaum veränderten. \ref{fig:rwin_with_loss}
+
+\begin{figure}
+    \includegraphics[width=0.49\textwidth]{res/02b-tcp/tcp_client_loss_rwin.png}
+    \hfill
+    \includegraphics[width=0.49\textwidth]{res/02b-tcp/tcp_server_loss_rwin.png}
+    \caption{Hier wird deutlich, dass das Empfangsfenster (rwin) auch bei einer Paketverlustrate von 30 \% kaum variiert.}
+    \label{fig:rwin_with_loss}
+\end{figure}
+
+Das Empfangsfenster blieb somit ausreichend groß, sodass die TCP-Flusskontrolle den Sender nicht begrenzte.
+Die beobachteten Verschlechterungen der Übertragung wurden daher hauptsächlich durch verlorene Segmente und die notwendigen TCP-Retransmissions verursacht.
