@@ -11,4 +11,4 @@ docker run --rm \
 	debian:bookworm-slim \
 	bash -eux ./tcptrace-util.sh
 bash -eux ./tshark-util.sh
-uv run --with matplotlib --with pandas analyze.py
+uv run --with matplotlib --with pandas --with scipy --with scikit-learn --with lmfit analyze.py
