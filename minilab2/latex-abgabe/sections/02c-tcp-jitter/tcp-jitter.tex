@@ -35,7 +35,7 @@ Da keine Paketverluste konfiguriert waren und keine signifikante Anzahl an Retra
     \label{fig:jitter_duplicate_ack}
 \end{figure}
 
-Unter den Jitter-Bedingungen trat lediglich eine einzelne TCP-Retransmission auf. \ref{fig:jitter_duplicate_ack}
+Unter den Jitter-Bedingungen trat lediglich eine einzelne TCP-Retransmission auf, siehe Abbildung~\ref{fig:jitter_duplicate_ack}.
 Da kein Paketverlust eingestellt war, ist davon auszugehen, dass diese nicht durch einen tatsächlichen Paketverlust verursacht wurde, sondern möglicherweise durch eine verzögerte Bestätigung (ACK) aufgrund der schwankenden Übertragungszeiten.
 TCP interpretiert eine ausbleibende Bestätigung innerhalb des geschätzten Zeitlimits als möglichen Verlust und kann daher vorsorglich eine erneute Übertragung auslösen.
 Die geringe Anzahl an Retransmissions zeigt jedoch, dass TCP die zusätzlichen Verzögerungen durch den Jitter weitgehend kompensieren konnte und die Verbindung stabil blieb.
