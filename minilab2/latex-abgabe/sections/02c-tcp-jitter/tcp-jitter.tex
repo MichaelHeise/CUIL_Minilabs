@@ -6,7 +6,19 @@ In diesem Abschnitt wird untersucht, wie TCP auf Jitter reagiert und welche Ausw
 
 \subsection{Parameter und Durchführung}
 
+Auch hier wird die gleiche Testumgebung wie in Abschnitt~\ref{sec:aufbau} verwendet.
+Der TCP Client (n1) sendet an den TCP-Server (n2) (vgl.\ Abschnitt~\ref{sec:tcp_docker_tool}).
+Auf beiden Seiten werden PCAPs aufgezeichnet (vgl.\ Abschnitt~\ref{sec:pcap_docker_capture}).
+
+Für die Jitter Messung wird mithilfe der TUI eine zusätzliche Verzögerung (Jitter) konfiguriert (vgl.\ Abschnitt~\ref{sec:link_einstellungen}).
+Die Packetloss Rate bleibt bei 0\,\%, sodass alle Beobachtungen isoliert von Störfaktoren betrachtet werden können und auf Jitter zurückzuführen sind.
+Als Referenz wird die gleiche Messung ohne Jitter durchgeführt.
+
 \subsection{Ergänzende Methodik}
+
+Die Analyse der Messungen erfolgt anhand der PCAPs in Wireshark (GUI).
+Zur zeitlichen Darstellung wird der \textit{I/O Graph} (Wireshark \textit{Statistics} Funktion) verwendet.
+Das Empfangsfenster (rwin) wird über den TCP Graph ausgelesen.
 
 \subsection{Ergebnisse}
 
