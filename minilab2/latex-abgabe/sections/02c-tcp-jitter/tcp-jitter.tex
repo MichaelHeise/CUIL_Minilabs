@@ -1,9 +1,88 @@
+\FloatBarrier
 \section{TCP unter Jitter}
+Jitter bezeichnet die Schwankungen in der Übertragungszeit von Paketen über ein Netzwerk.
+Diese Schwankungen können zu Verzögerungen und Verhalten wie bei Paketverlusten führen.
+In diesem Abschnitt wird untersucht, wie TCP auf Jitter reagiert und welche Auswirkungen dies auf die Übertragungsqualität hat.
 
 \subsection{Parameter und Durchführung}
 
+Auch hier wird die gleiche Testumgebung wie in Abschnitt~\ref{sec:aufbau} verwendet.
+Der TCP Client (n1) sendet an den TCP-Server (n2) (vgl.\ Abschnitt~\ref{sec:tcp_docker_tool}).
+Auf beiden Seiten werden PCAPs aufgezeichnet (vgl.\ Abschnitt~\ref{sec:pcap_docker_capture}).
+
+Für die Jitter Messung wird mithilfe der TUI eine zusätzliche Verzögerung (Jitter) konfiguriert (vgl.\ Abschnitt~\ref{sec:link_einstellungen}).
+Die Packetloss Rate bleibt bei 0\,\%, sodass alle Beobachtungen isoliert von Störfaktoren betrachtet werden können und auf Jitter zurückzuführen sind.
+Als Referenz wird die gleiche Messung ohne Jitter durchgeführt.
+
 \subsection{Ergänzende Methodik}
+
+Die Analyse der Messungen erfolgt anhand der PCAPs in Wireshark (GUI).
+Zur zeitlichen Darstellung wird der \textit{I/O Graph} (Wireshark \textit{Statistics} Funktion) verwendet.
+Das Empfangsfenster (rwin) wird über den TCP Graph ausgelesen.
 
 \subsection{Ergebnisse}
 
-\subsection{Diskussion}
+\subsubsection{Retransmissions unter Jitter}
+Unter den Jitter-Bedingungen fallen einem bei der Wireshark Analyse sofort die Duplicate ACK auf.
+Diese deuten darauf hin, dass TCP-Segmente aufgrund der schwankenden Verzögerungen nicht in der ursprünglichen Reihenfolge beim Empfänger eintrafen.
+Der Empfänger bestätigte daher mehrfach den zuletzt vollständig erhaltenen Datenstand.
+Da keine Paketverluste konfiguriert waren und keine signifikante Anzahl an Retransmissions auftrat, ist davon auszugehen, dass die Verzögerungsschwankungen die Ursache waren.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{res/02c-tcp/tcp_client_jitter_retransmissions.png}
+    \caption{Hier wird ein Dublikat beim Client festgestellt, welches auf die Jitter-Bedingungen zurückzuführen ist. Beim Server gab es keine Dublikate.}
+    \label{fig:jitter_duplicate_ack}
+\end{figure}
+
+Unter den Jitter-Bedingungen trat lediglich eine einzelne TCP-Retransmission auf, siehe Abbildung~\ref{fig:jitter_duplicate_ack}.
+Da kein Paketverlust eingestellt war, ist davon auszugehen, dass diese nicht durch einen tatsächlichen Paketverlust verursacht wurde, sondern möglicherweise durch eine verzögerte Bestätigung (ACK) aufgrund der schwankenden Übertragungszeiten.
+TCP interpretiert eine ausbleibende Bestätigung innerhalb des geschätzten Zeitlimits als möglichen Verlust und kann daher vorsorglich eine erneute Übertragung auslösen.
+Die geringe Anzahl an Retransmissions zeigt jedoch, dass TCP die zusätzlichen Verzögerungen durch den Jitter weitgehend kompensieren konnte und die Verbindung stabil blieb.
+
+\subsubsection{Paketverzögerungen ohne Jitter}
+Unter normalen Bedingungen ohne zusätzliche Verzögerungsschwankungen zeigen die Paketabstände bereits geringe natürliche Schwankungen. \ref{fig:default_packet_delay}
+Diese entstehen durch die Verarbeitung im Betriebssystem, die TCP-Implementierung und die Ausführung der Anwendung.
+Die Abstände sind daher nicht vollständig konstant, bewegen sich jedoch in einem vergleichsweise engen Bereich.
+Auf dem Graphen schwanken sie sogar so wenig, dass die Balken fast alle gleich groß aussehen.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{res/02c-tcp/package_latency_default.png}
+    \caption{Hier wird deutlich, dass die Paketabstände unter normalen Bedingungen bereits geringe natürliche Schwankungen aufweisen.}
+    \label{fig:default_packet_delay}
+\end{figure}
+
+Wobei die zurückerhaltenen ACKs aufgrund der eingestellten Grundverzögerung von 0ms ohne Jitter sogar konstant so schnell zurück kommen, dass man den Abstand im Graphen im vergleich zu den gesendeten Datenpaketen nicht einmal sieht.
+
+\subsubsection{Paketverzögerungen mit Jitter}
+Durch das Hinzufügen von Jitter verändern sich die Paketankunftszeiten deutlich stärker. \ref{fig:jitter_packet_delay}
+Die Abstände zwischen den Paketen schwanken stärker, da die Pakete durch die künstlich eingeführte Verzögerung nicht mehr gleichmäßig beim Empfänger eintreffen.
+Dadurch entstehen größere Unterschiede zwischen kurzen und langen Paketabständen.
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{res/02c-tcp/package_latency_jitter.png}
+    \caption{Hier wird deutlich, dass die Paketabstände unter Jitter-Bedingungen stärker schwanken.}
+    \label{fig:jitter_packet_delay}
+\end{figure}
+
+Hierbei sieht man, dass sowohl die Abstände der Datenpakete als auch die Abstände der ACKs (die man hier im Graphen nun auch erkennen kann) stark schwanken.
+
+Die Messungen zeigen somit, dass Jitter nicht unbedingt zu Paketverlust führen muss, sondern sich hauptsächlich durch eine erhöhte Varianz der Paketlaufzeiten bemerkbar macht.
+TCP kann diese Schwankungen in diesem Experiment weitgehend ausgleichen, was daran erkennbar ist, dass nur eine einzige Retransmission auftrat. 
+
+\subsubsection{Flusskontrolle unter Jitter}
+Durch die Einführung einer zusätzlichen Verzögerung mit Jitter schwankten die Paketankunftszeiten deutlich stärker als unter normalen Bedingungen.
+Die TCP-Verbindung blieb jedoch stabil, da keine tatsächlichen Paketverluste auftraten. \ref{fig:jitter_rwin} Das Empfangsfenster (rwin) zeigte weiterhin keine starken Veränderungen, wodurch erkennbar ist, dass die Flusskontrolle nicht durch die schwankenden Laufzeiten begrenzt wurde.
+Die Verzögerung beeinflusste hauptsächlich die RTT-Schätzung von TCP und damit die zeitliche Abstimmung der Übertragung.
+Retransmissions traten nur auf, wenn Verzögerungen groß genug waren, dass TCP eine verspätete Bestätigung als möglichen Verlust interpretierte.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{res/02c-tcp/tcp_client_jitter_rwin.png}
+    \includegraphics[width=\textwidth]{res/02c-tcp/tcp_server_jitter_rwin.png}
+    \caption{Hier wird deutlich, dass das Empfangsfenster (rwin) auch unter Jitter-Bedingungen weitgehend stabil blieb.}
+    \label{fig:jitter_rwin}
+\end{figure}

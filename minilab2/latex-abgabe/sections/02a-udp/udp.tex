@@ -1,3 +1,4 @@
+\FloatBarrier
 \section{UDP}
 % Kurz und kanpp wechle Schicht was ist das.
 Das UDP (User Datagram Protocol) ist ein verbindungsloses Protokoll der Transportschicht.
@@ -6,15 +7,9 @@ In diesem Versuch soll der verlustfreie und verlustbehaftete UDP Datenverkehr zw
 \subsection{Durchführung}
 Für die Durchführung wurde das Docker Netzwerk \ref{sec:aufbau} benutzt.
 Es wurde zweimal der UDP Datenverkehr zwischen zwei Hosts untersucht.
-Die Docker Umgebung wurde bei der Standardkonfiguration belassen. Einzig die Link-Parameter \ref{sec:link_einstellungen} wurden beim zweiten Durchlauf angepasst, um den Paketverlust zu simulieren:
-
-\begin{itemize}[noitemsep]
-    \item Bandwidth: 100 Mbit/s
-    \item Delay: 0 ms
-    \item Jitter: 0 ms
-    \item Paketverlust: 30 \%
-    \item Burst: 32kbit
-\end{itemize}
+Falls Werte nicht explizit angegeben sind, wurden die Standardwerte der Testumgebung verwendet.
+Einzig die Link-Parameter \ref{sec:link_einstellungen} wurden beim zweiten Durchlauf angepasst, um den Paketverlust zu simulieren.
+Der Paketverlust wurde auf 30 \% eingestellt, um die Auswirkungen von Paketverlusten auf den UDP Datenverkehr zu untersuchen.
 
 In beiden Fällen wurden folgende Schritte durchgeführt:
 \begin{enumerate}
@@ -23,11 +18,8 @@ In beiden Fällen wurden folgende Schritte durchgeführt:
     \item Starten des Netzwerkverkehr-Mitschnitts \ref{sec:pcap_docker_capture}
     \item Starten der UDP Verbindung zwischen den Hosts n1 (UDP Client) und n2 (UDP Server) \ref{sec:udp_docker_tool}
     \begin{itemize}[noitemsep]
-        \item Server: n2
-        \item Client: n1
         \item Count: 30
         \item Interval: 1 s
-        \item size: 64 B
     \end{itemize}
     \item Beenden des Netzwerkverkehr-Mitschnitts \ref{sec:pcap_docker_capture}
     \item Schließen der Docker Umgebung
