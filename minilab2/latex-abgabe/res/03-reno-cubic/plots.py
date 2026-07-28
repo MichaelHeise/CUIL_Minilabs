@@ -125,7 +125,7 @@ def fit_ss(ax, t_resamp, y_resamp, first_loss):
         color=FIT_COLORS["ss"],
         linewidth=2,
         linestyle="dashed",
-        label=f"Exp. Fit (SS, R2={fit.rsquared}, T2≈{t2}ms)",
+        label=f"Exp. Fit (SS, R2={fit.rsquared:.4f}, T2≈{t2:.1f}ms)",
     )
 
 
@@ -162,13 +162,14 @@ def fit_ca(ax, t_resamp, y_resamp, ca_key):
         r2_vals.append(r2_score(y_grow, np.polyval(coeffs, t_grow)))
 
     r2_mean = np.mean(r2_vals) if r2_vals else 0
-    ax.plot(  # legend only
+    # stole this trick: https://matplotlib.org/stable/users/explain/axes/legend_guide.html
+    ax.plot(
         [],
         [],
         color=FIT_COLORS["ca"],
         linewidth=1,
         linestyle="dashed",
-        label=f"{ca_name} Fit (CA, R2={r2_mean}, n={len(r2_vals)} Regime)",
+        label=f"{ca_name} Fit (CA, R2={r2_mean:.4f}, n={len(r2_vals)} Regime)",
     )
 
 
