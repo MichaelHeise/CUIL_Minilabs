@@ -6,8 +6,35 @@ Dazu müssen verlorene Pakete erneut übertragen werden.
 Diese sogenannten Retransmissions werden in diesem Experiment genauer untersucht.
 
 \subsection{Parameter und Durchführung}
+Auch für dieses Experminet wurde die gleiche Testumgebung wie in Abschnitt \ref{sec:aufbau} verwendet.
+
+\subsubsection{Ablauf}
+
+Für das Experiment wurde das Shell Tool \ref{sec:shell_docker_tool} in der Testumgebung verwendet.
+
+Auf dem Host n2 wird der TCP-Server gestartet, welcher auf eingehende Verbindungen wartet.
+\begin{lstlisting}[language=bash]
+tcp_server.py --port 9999
+\end{lstlisting}
+
+Auf dem Host n1 wird der TCP-Client gestartet, welcher eine Verbindung zum Server aufbaut und Daten überträgt.
+\begin{lstlisting}[language=bash]
+    tcp_client.py --host n2 --port 9999 --interval 1 --count 30 --mode persistent
+\end{lstlisting}
+
+Um den Traffic untersuchen zu können, wurde das Paket Capture Tool der Umgebung verwendet \ref{sec:pcap_docker_capture}, um die TCP-Pakete auf dem Server und Client zu erfassen. Deshalb wurde vor dem Starten das Tool gestartet und nach dem Beenden der Übertragung wieder gestoppt.
+
+\subsubsection{Parameter}
+Der Ablauf wurde mit verschiedenen Parametern durchgeführt.
+Einerseits wurde der Verbindungsmodus des Clients variiert, um die Unterschiede zwischen persistenter und Reconnect-Verbindung zu untersuchen.
+
+Des Weiteren wurde die Verlustrate des Links zwischen den beiden Hosts auf 0 \% und 30 \% variiert \ref{sec:link_einstellungen}, um die Auswirkungen von Paketverlusten auf die TCP-Retransmissions zu analysieren.
+
+Durch 2 verschiedene Parameterwerte für die Verbindung und 2 verschiedene Verlustraten wurden insgesamt 4 Experimente durchgeführt.
 
 \subsection{Ergänzende Methodik}
+Um den Paketverlust und andere Werte über Zeit auszuwerten wurde der Statistics->GraphI/O Tab des Wireshark Tools verwendet.
+Die Werte wurden über die Zeit in einem Graphen dargestellt, um die Entwicklung der Retransmissions und anderer Parameter während der Übertragung zu analysieren.
 
 \subsection{Ergebnisse}
 
