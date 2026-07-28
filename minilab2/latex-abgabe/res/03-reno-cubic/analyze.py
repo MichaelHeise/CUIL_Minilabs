@@ -31,7 +31,7 @@ def main():
     for alg, label, color in ALGS:
         plot_cwnd_with_losses(alg, label, color, windows[alg], losses[alg])
     plot_retransmission_comparison(retransmissions)
-    plot_phase_fitting(windows, losses)
+    plot_phase_fitting(windows)
 
 
 if __name__ == "__main__":

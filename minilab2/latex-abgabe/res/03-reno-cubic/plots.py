@@ -109,16 +109,16 @@ def resample(t_raw, y_raw):
     return (boundaries[:-1] + boundaries[1:])[valid] / 2, y_out[valid]
 
 
-def fit_ss(ax, t_resamp, y_resamp, first_loss):
-    ss_range = t_resamp < first_loss  # select only points before first loss
-    # need this for filtering out reno specific first part
-    if np.count_nonzero(ss_range) < 3:
+def fit_ss(ax, t_resamp, y_resamp):
+    first_peak = np.argmax(y_resamp)  # we assume ss = start to first peak
+    if first_peak < 3:
         return
-    fit = Model(lambda x, a, r: a * np.exp(r * x)).fit(  # Exp model fit
-        y_resamp[ss_range], x=t_resamp[ss_range], a=float(y_resamp[ss_range][0]), r=1.0
+    t_ss, y_ss = t_resamp[:first_peak], y_resamp[:first_peak]
+    fit = Model(lambda x, a, r: a * np.exp(r * x)).fit(  # exp model fit
+        y_ss, x=t_ss, a=float(y_ss[0]), r=1.0
     )
     t2 = np.log(2) / fit.params["r"].value * 1000
-    t_smoothened = np.linspace(t_resamp[ss_range][0], t_resamp[ss_range][-1], 100)
+    t_smoothened = np.linspace(t_ss[0], t_ss[-1], 100)
     ax.plot(
         t_smoothened,
         fit.eval(x=t_smoothened),
@@ -175,7 +175,7 @@ def fit_ca(ax, t_resamp, y_resamp, ca_key):
     )
 
 
-def plot_phase_fitting(windows, losses):
+def plot_phase_fitting(windows):
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
     for idx, (alg, label, _, ca_key) in enumerate(
         [
@@ -197,8 +197,7 @@ def plot_phase_fitting(windows, losses):
             alpha=0.5,
             label=f"TCP {label} cwnd",
         )
-        loss_times = sorted(losses[alg]["time"])
-        fit_ss(ax, t_resamp, y_resamp, loss_times[0])
+        fit_ss(ax, t_resamp, y_resamp)
         fit_ca(ax, t_resamp, y_resamp, ca_key)
 
         ax.set(xlabel="Zeit [s]", ylabel="cwnd (Outstanding)", title=f"TCP {label}")

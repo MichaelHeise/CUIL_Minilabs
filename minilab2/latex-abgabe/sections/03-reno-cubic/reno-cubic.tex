@@ -190,12 +190,12 @@ Dabei wird für jede Congestion Avoidance Regim (Wachstumsphase zwischen zwei Ve
     \caption{Regressionsbasierte Analyse: Congestion Avoidance Fits}\label{fig:phase_fitting}
 \end{figure}
 
-Für TCP Reno bestätigt der lineare Fit den AIMD Mechanismus mit einem mittleren $\bar{R}^2 = 0{,}959$ über 22 Regime.
-Ein exponentieller Fit für die Slow-Start Phase ist für Reno nicht darstellbar, da der erste Paketverlust bereits zu Beginn auftritt ($<$ 3 RTT).
+Für TCP Reno bestätigt der lineare Fit den AIMD Mechanismus mit einem mittleren $\bar{R}^2 = 0{,}942$ über 44 Regime.
+Der exponentielle Slow-Start Fit ergibt $R^2 = 0{,}901$ mit einer Verdopplungszeit von $T_2 \approx 323$\,ms.
 
-Für TCP CUBIC ergibt der kubische Fit $\bar{R}^2 = 0{,}956$ über 16 Regime.
+Für TCP CUBIC ergibt der kubische Fit $\bar{R}^2 = 0{,}962$ über 30 Regime.
 Das Wachstum folgt der kubischen Funktion $W(t) = C \cdot (t - K)^3 + W_{\max}$ (vgl. CUBIC-RFC~\cite{tcp_cubic}).
-Die Slow-Start Phase umfasst lediglich vier RTTs ($R^2 = 0{,}845$, Verdopplungszeit $T_2 \approx 240$\,ms) und wird durch den ersten Verlust abgebrochen.
+Die Slow-Start Phase wird durch den ersten Verlust abgebrochen ($R^2 = 0{,}871$, Verdopplungszeit $T_2 \approx 759$\,ms).
 
 Die Reaktion auf Verluste unterscheidet sich im Reduktionsfaktor: Reno halbiert das cwnd ($\beta = 0{,}5$), CUBIC reduziert auf 70\,\% ($\beta = 0{,}7$).
 Dies wird durch die gemessenen Daten ebenso widergespiegelt.
@@ -203,7 +203,7 @@ Dies wird durch die gemessenen Daten ebenso widergespiegelt.
 \subsubsection{Performance, Robustheit und Stabilität}
 
 Im Durchsatz sind beide Algorithmen nahezu gleichwertig (Reno: 968\,kbit/s, CUBIC: 956\,kbit/s).
-Dies ist auf das niedrige Bandbreiten-Verzögerungs-Produkt (BDP $\approx 1\,\text{Mbit/s} \times 80\,\text{ms} \approx 10$\,kB) zurückzuführen: beide Algorithmen füllen die verfügbare Kapazität, bevor CUBICs aggressiveres Wachstum zum Tragen kommen kann.
+Dies ist auf das niedrige BDP (BDP $\approx 1\,\text{Mbit/s} \times 80\,\text{ms} \approx 10$\,kB) zurückzuführen: beide Algorithmen füllen die verfügbare Kapazität, bevor CUBICs aggressiveres Wachstum zum Tragen kommen kann.
 
 TCP CUBIC zeigt eine leicht niedrigere Verlustrate (2,9\,\% vs.\ 3,4\,\%) und weniger Retransmissionen (71 vs.\ 81).
 Der höhere Reduktionsfaktor ($\beta = 0{,}7$) bewirkt, dass CUBIC nach einem Verlust von einem höheren cwnd aus weiterwächst.
